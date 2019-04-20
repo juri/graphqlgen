@@ -87,4 +87,11 @@ class GraphQLTests: XCTestCase {
         let options = ["nested(d: {a: 1 b: {c: 3}})", "nested(d: {b: {c: 3} a: 1})"]
         XCTAssertTrue(options.contains(try gql.stringifier.stringify()))
     }
+
+    func testFieldAlias() throws {
+        let gql = GraphQL.field(.init(alias: "grace", name: "f", arguments: ["foo": "zap"]))
+        XCTAssertEqual(
+            try gql.stringifier.stringify(),
+            #"grace: f(foo: "zap")"#)
+    }
 }

@@ -29,6 +29,7 @@ indirect enum GraphQL {
     }
 
     struct Field {
+        let alias: String
         let name: String
         let arguments: Arguments
     }
@@ -159,10 +160,15 @@ extension Array: GraphQLArgumentValue where Element: GraphQLArgumentValue {
 }
 
 extension GraphQL.Field {
+    init(name: String, arguments: GraphQL.Arguments = .init()) {
+        self.init(alias: "", name: name, arguments: arguments)
+    }
+
     var stringifier: Stringifier {
         return Stringifier {
             let args = try self.arguments.stringifier.stringify()
-            return #"\#(self.name)\#(args.isEmpty ? "" : "(\(args))")"#
+            let aliasPrefix = self.alias.isEmpty ? "" : self.alias + ": "
+            return #"\#(aliasPrefix)\#(self.name)\#(args.isEmpty ? "" : "(\(args))")"#
         }
     }
 }
