@@ -34,9 +34,9 @@ indirect enum GraphQL {
     }
 
     struct Arguments {
-        let args: [String: GraphQLArgumentValue]
+        let args: [String: Any]
 
-        init(_ args: [String: GraphQLArgumentValue]) {
+        init(_ args: [String: Any]) {
             self.args = args
         }
     }
@@ -168,17 +168,39 @@ extension GraphQL.Field {
     }
 }
 
+private func stringifyArgument(value: Any) throws -> String {
+    switch value {
+    case let gql as GraphQLArgumentValue:
+        return gql.asGraphQLValue()
+    case let arr as [Any]:
+        let formatted = try arr.map(stringifyArgument(value:)).joined(separator: " ")
+        return #"[\#(formatted)]"#
+    case let dict as [String: Any]:
+        let formatted = try dict.map(stringifyArgument(key:value:)).joined(separator: " ")
+        return #"{\#(formatted)}"#
+    default:
+        throw GraphQLTypeError()
+    }
+}
+
+private func stringifyArgument(key: String, value: Any) throws -> String {
+    let vstr = try stringifyArgument(value: value)
+    return "\(key): \(vstr)"
+}
+
 extension GraphQL.Arguments {
     var stringifier: Stringifier {
         return Stringifier {
-            let args = self.args.map(GraphQL.encodePair(key:value:))
+            let args = try self.args.map(stringifyArgument(key:value:))
             return args.joined(separator: " ")
         }
     }
 }
 
+struct GraphQLTypeError: Error {}
+
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
-    init(dictionaryLiteral elements: (String, GraphQLArgumentValue)...) {
+    init(dictionaryLiteral elements: (String, Any)...) {
         self.init(Dictionary(uniqueKeysWithValues: elements))
     }
 }

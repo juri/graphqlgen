@@ -61,4 +61,24 @@ class GraphQLTests: XCTestCase {
             #"hasArray(arr: [1 2 3])"#)
     }
 
+    func testFieldDictValue() throws {
+        let gql = GraphQL.field(.init(name: "hasDict", arguments: ["d": ["zap": 4]]))
+        XCTAssertEqual(
+            try gql.stringifier.stringify(),
+            #"hasDict(d: {zap: 4})"#)
+    }
+
+    func testFieldNestedArrayValue() throws {
+        let gql = GraphQL.field(.init(name: "nested", arguments: ["d": [1, "foo", [3, "bar"]]]))
+        XCTAssertEqual(
+            try gql.stringifier.stringify(),
+            #"nested(d: [1 "foo" [3 "bar"]])"#)
+    }
+
+    func testFieldNestedDictValue() throws {
+        let gql = GraphQL.field(.init(name: "nested", arguments: ["d": ["a": 1, "b": ["c": 3]]]))
+        XCTAssertEqual(
+            try gql.stringifier.stringify(),
+            #"nested(d: {a: 1 b: {c: 3}})"#)
+    }
 }
