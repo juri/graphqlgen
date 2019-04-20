@@ -84,8 +84,7 @@ class GraphQLTests: XCTestCase {
 
     func testFieldNestedDictValue() throws {
         let gql = GraphQL.field(.init(name: "nested", arguments: ["d": ["a": 1, "b": ["c": 3]]]))
-        XCTAssertEqual(
-            try gql.stringifier.stringify(),
-            #"nested(d: {a: 1 b: {c: 3}})"#)
+        let options = ["nested(d: {a: 1 b: {c: 3}})", "nested(d: {b: {c: 3} a: 1})"]
+        XCTAssertTrue(options.contains(try gql.stringifier.stringify()))
     }
 }
