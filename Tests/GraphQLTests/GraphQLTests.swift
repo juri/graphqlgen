@@ -28,11 +28,18 @@ class GraphQLTests: XCTestCase {
             #"query { ref(qualifiedName: "master") { message } }"#)
     }
 
-    func testFragment() throws {
+    func testInlineFragment() throws {
         let frag = GraphQL.inlineFragment("Commit", children: [.history(.first(10), children: [.leaf("message")])])
         XCTAssertEqual(
             try frag.stringifier.stringify(),
             #"... on Commit { history(first: 10) { message } }"#)
+    }
+
+    func testFragmentSpread() throws {
+        let frag = GraphQL.fragmentSpread("frag")
+        XCTAssertEqual(
+            try frag.stringifier.stringify(),
+            #"... frag"#)
     }
 
     func testParentLeaf() throws {
