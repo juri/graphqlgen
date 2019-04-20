@@ -163,7 +163,6 @@ extension GraphQL.Field {
         return Stringifier {
             let args = try self.arguments.stringifier.stringify()
             return #"\#(self.name)\#(args.isEmpty ? "" : "(\(args))")"#
-
         }
     }
 }
