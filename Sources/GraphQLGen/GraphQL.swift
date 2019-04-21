@@ -274,12 +274,6 @@ extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
     }
 }
 
-private extension String.StringInterpolation {
-    mutating func appendInterpolation(escaping str: String) {
-        self.appendLiteral(GraphQL.escape(str))
-    }
-}
-
 extension GraphQL {
     var stringifier: Stringifier {
         return Stringifier {
