@@ -1,31 +1,33 @@
 import XCTest
 @testable import GraphQLGen
 
+private extension GraphQL.Selection {
+    static var f1: GraphQL.Selection { return .field(.init(name: "f1")) }
+    static var f2: GraphQL.Selection { return .field(.init(name: "f2")) }
+
+    static func repo(owner: String, name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Selection {
+        return .field(.init(name: "repository", arguments: ["owner": owner, "name": name], selections: selections))
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
-        let query = GraphQL.query([.leaf("oid"), .leaf("committedDate")])
-        XCTAssertEqual(try query.stringifier.stringify(), "query { oid committedDate }")
+        let query = GraphQL.query([.f1, .f2])
+        XCTAssertEqual(try query.stringifier.stringify(), "query { f1 f2 }")
     }
 
     func testRepository() throws {
-        let query = GraphQL.query([.repository(owner: "o", name: "n", children: [.leaf("message")])])
+        let query = GraphQL.query([.repo(owner: "o", name: "n", [.f1])])
         XCTAssertEqual(
             try query.stringifier.stringify(),
-            #"query { repository(owner: "o", name: "n") { message } }"#)
+            #"query { repository(owner: "o" name: "n") { f1 } }"#)
     }
 
     func testEscaping() throws {
-        let query = GraphQL.query([.repository(owner: "o\\hello", name: "n\"world", children: [.leaf("message")])])
+        let query = GraphQL.query([.repo(owner: "o\\hello", name: "n\"world", [.f1])])
         XCTAssertEqual(
             try query.stringifier.stringify(),
-            #"query { repository(owner: "o\\hello", name: "n\"world") { message } }"#)
-    }
-
-    func testRef() throws {
-        let query = GraphQL.query([.ref(.qualifiedName("master"), children: [.leaf("message")])])
-        XCTAssertEqual(
-            try query.stringifier.stringify(),
-            #"query { ref(qualifiedName: "master") { message } }"#)
+            #"query { repository(owner: "o\\hello" name: "n\"world") { f1 } }"#)
     }
 
     func testInlineFragment() throws {
@@ -67,11 +69,6 @@ class GraphQLTests: XCTestCase {
         XCTAssertEqual(
             try frag.stringifier.stringify(),
             #"... frag"#)
-    }
-
-    func testParentLeaf() throws {
-        let gql = GraphQL.parent("daddy", [.leaf("largeadultson1"), .leaf("largeadultson2")])
-        XCTAssertEqual(try gql.stringifier.stringify(), #"daddy { largeadultson1 largeadultson2 }"#)
     }
 
     func testFieldStringValue() throws {

@@ -8,15 +8,6 @@
 import Foundation
 
 indirect enum GraphQL {
-    enum Ref {
-        case qualifiedName(String)
-    }
-
-    enum History {
-        case first(Int)
-        case after(String)
-    }
-
     enum OperationType: String {
         case query
         case mutation
@@ -45,6 +36,7 @@ indirect enum GraphQL {
     struct Operation {
         let type: OperationType
         let name: String
+        let selectionSet: SelectionSet
     }
 
     struct Field {
@@ -62,14 +54,9 @@ indirect enum GraphQL {
         }
     }
 
-    case operation(Operation, [GraphQL])
-    case repository(owner: String, name: String, children: [GraphQL])
-    case ref(Ref, children: [GraphQL])
+    case operation(Operation)
     case inlineFragment(InlineFragment)
-    case history(History, children: [GraphQL])
-    case leaf(String)
     case fragmentSpread(FragmentSpread)
-    case parent(String, [GraphQL])
     case field(Field)
 
     static func escape(_ string: String) -> String {
@@ -94,12 +81,12 @@ indirect enum GraphQL {
         return "\(key): \(encodedValue)"
     }
 
-    static func query(_ name: String, _ children: [GraphQL]) -> GraphQL {
-        return .operation(.init(type: .query, name: name), children)
+    static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
+        return .init(type: .query, name: name, selections: selections)
     }
 
-    static func query( _ children: [GraphQL]) -> GraphQL {
-        return self.query("", children)
+    static func query(_ selections: [GraphQL.Selection]) -> GraphQL.Operation {
+        return .init(type: .query, name: "", selections: selections)
     }
 }
 
@@ -108,31 +95,15 @@ struct Stringifier {
 }
 
 extension GraphQL.Operation {
-    init(type: GraphQL.OperationType) {
-        self.init(type: type, name: "")
+    init(type: GraphQL.OperationType, name: String = "", selections: [GraphQL.Selection] = []) {
+        self.init(type: type, name: "", selectionSet: .init(selections: selections))
     }
-}
 
-extension GraphQL.Ref {
     var stringifier: Stringifier {
         return Stringifier {
-            switch self {
-            case .qualifiedName(let name):
-                return "qualifiedName: \"\(GraphQL.escape(name))\""
-            }
-        }
-    }
-}
-
-extension GraphQL.History {
-    var stringifier: Stringifier {
-        return Stringifier {
-            switch self {
-            case let .first(count):
-                return "first: \(count)"
-            case let .after(cursor):
-                return "after: \"\(GraphQL.escape(cursor))\""
-            }
+            let name = self.name.isEmpty ? "" : " " + self.name
+            let selections = try self.selectionSet.stringifier.stringify()
+            return #"\#(self.type.rawValue)\#(name) \#(selections)"#
         }
     }
 }
@@ -239,6 +210,15 @@ extension GraphQL.Field {
         self.init(alias: "", name: name, arguments: arguments, selectionSet: selectionSet)
     }
 
+    init(
+        alias: String = "",
+        name: String,
+        arguments: GraphQL.Arguments = .init(),
+        selections: [GraphQL.Selection] = [])
+    {
+        self.init(alias: "", name: name, arguments: arguments, selectionSet: .init(selections: selections))
+    }
+
     var stringifier: Stringifier {
         return Stringifier {
             let args = try self.arguments.stringifier.stringify()
@@ -304,27 +284,10 @@ extension GraphQL {
     var stringifier: Stringifier {
         return Stringifier {
             switch self {
-            case let .operation(op, children):
-                let cstr = try GraphQL.stringify(children)
-                return #"\#(op.type)\#(!op.name.isEmpty ? " " + op.name : "") { \#(cstr) }"#
-            case let .repository(owner, name, children):
-                let cstr = try GraphQL.stringify(children)
-                return #"repository(owner: "\#(escaping: owner)", name: "\#(escaping: name)") { \#(cstr) }"#
-            case let .ref(ref, children):
-                let cstr = try GraphQL.stringify(children)
-                let refstr = try ref.stringifier.stringify()
-                return #"ref(\#(refstr)) { \#(cstr) }"#
+            case let .operation(op):
+                return try op.stringifier.stringify()
             case let .inlineFragment(inlineFragment):
                 return try inlineFragment.stringifier.stringify()
-            case let .history(history, children):
-                let cstr = try GraphQL.stringify(children)
-                let hisstr = try history.stringifier.stringify()
-                return #"history(\#(hisstr)) { \#(cstr) }"#
-            case let .leaf(name):
-                return name
-            case let .parent(name, children):
-                let cstr = try GraphQL.stringify(children)
-                return "\(name) { \(cstr) }"
             case let .fragmentSpread(fs):
                 return try fs.stringifier.stringify()
             case let .field(field):
