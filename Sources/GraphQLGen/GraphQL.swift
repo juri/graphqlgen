@@ -23,6 +23,25 @@ indirect enum GraphQL {
         case subscription
     }
 
+    enum Selection {
+        case field(Field)
+        case inlineFragment(InlineFragment)
+        case fragmentSpread(FragmentSpread)
+    }
+
+    struct SelectionSet {
+        let selections: [Selection]
+    }
+
+    struct InlineFragment {
+        let namedType: String
+        let selectionSet: SelectionSet
+    }
+
+    struct FragmentSpread {
+        let name: String
+    }
+
     struct Operation {
         let type: OperationType
         let name: String
@@ -45,10 +64,10 @@ indirect enum GraphQL {
     case operation(Operation, [GraphQL])
     case repository(owner: String, name: String, children: [GraphQL])
     case ref(Ref, children: [GraphQL])
-    case inlineFragment(String, children: [GraphQL])
+    case inlineFragment(InlineFragment)
     case history(History, children: [GraphQL])
     case leaf(String)
-    case fragmentSpread(String)
+    case fragmentSpread(FragmentSpread)
     case parent(String, [GraphQL])
     case field(Field)
 
@@ -116,6 +135,51 @@ extension GraphQL.History {
         }
     }
 }
+
+extension GraphQL.Selection {
+    var stringifer: Stringifier {
+        return Stringifier {
+            switch self {
+            case let .field(field):
+                return try field.stringifier.stringify()
+            case let .fragmentSpread(fragmentSpread):
+                return try fragmentSpread.stringifier.stringify()
+            case let .inlineFragment(inlineFragment):
+                return try inlineFragment.stringifier.stringify()
+            }
+        }
+    }
+}
+
+extension GraphQL.SelectionSet {
+    var stringifier: Stringifier {
+        return Stringifier {
+            let s = try self.selections
+                .map { try $0.stringifer.stringify() }
+                .joined(separator: " ")
+            return #"{ \#(s) }"#
+        }
+    }
+}
+
+extension GraphQL.FragmentSpread {
+    var stringifier: Stringifier {
+        return Stringifier {
+            return "... \(self.name)"
+        }
+    }
+}
+
+extension GraphQL.InlineFragment {
+    var stringifier: Stringifier {
+        return Stringifier {
+            let cstr = try self.selectionSet.stringifier.stringify()
+            let typeCondition = self.namedType.isEmpty ? "" : "... on \(self.namedType) "
+            return "\(typeCondition)\(cstr)"
+        }
+    }
+}
+
 
 protocol GraphQLArgumentValue {
     func asGraphQLValue() -> String
@@ -210,6 +274,12 @@ extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
     }
 }
 
+extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
+    init(stringLiteral value: String) {
+        self.init(name: value)
+    }
+}
+
 private extension String.StringInterpolation {
     mutating func appendInterpolation(escaping str: String) {
         self.appendLiteral(GraphQL.escape(str))
@@ -230,9 +300,8 @@ extension GraphQL {
                 let cstr = try GraphQL.stringify(children)
                 let refstr = try ref.stringifier.stringify()
                 return #"ref(\#(refstr)) { \#(cstr) }"#
-            case let .inlineFragment(frag, children):
-                let cstr = try GraphQL.stringify(children)
-                return "... on \(escaping: frag) { \(cstr) }"
+            case let .inlineFragment(inlineFragment):
+                return try inlineFragment.stringifier.stringify()
             case let .history(history, children):
                 let cstr = try GraphQL.stringify(children)
                 let hisstr = try history.stringifier.stringify()
@@ -242,8 +311,8 @@ extension GraphQL {
             case let .parent(name, children):
                 let cstr = try GraphQL.stringify(children)
                 return "\(name) { \(cstr) }"
-            case let .fragmentSpread(name):
-                return "... \(name)"
+            case let .fragmentSpread(fs):
+                return try fs.stringifier.stringify()
             case let .field(field):
                 return try field.stringifier.stringify()
             }

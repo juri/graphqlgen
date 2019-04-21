@@ -29,10 +29,13 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInlineFragment() throws {
-        let frag = GraphQL.inlineFragment("Commit", children: [.history(.first(10), children: [.leaf("message")])])
+        let frag = GraphQL.inlineFragment(
+            .init(
+                namedType: "Commit",
+                selectionSet: .init(selections: [.field(.init(name: "message"))])))
         XCTAssertEqual(
             try frag.stringifier.stringify(),
-            #"... on Commit { history(first: 10) { message } }"#)
+            #"... on Commit { message }"#)
     }
 
     func testFragmentSpread() throws {
