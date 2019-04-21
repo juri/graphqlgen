@@ -162,6 +162,12 @@ extension GraphQL.SelectionSet {
     }
 }
 
+extension GraphQL.SelectionSet: ExpressibleByArrayLiteral {
+    init(arrayLiteral elements: GraphQL.Selection...) {
+        self.init(selections: elements)
+    }
+}
+
 extension GraphQL.FragmentSpread {
     var stringifier: Stringifier {
         return Stringifier {
