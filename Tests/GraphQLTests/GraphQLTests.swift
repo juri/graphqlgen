@@ -38,6 +38,30 @@ class GraphQLTests: XCTestCase {
             #"... on Commit { message }"#)
     }
 
+    func testInlineFragmentWithSelectionSetInField() throws {
+        let frag = GraphQL.inlineFragment(
+            .init(
+                namedType: "Commit",
+                selectionSet: .init(
+                    selections: [
+                        .field(
+                            .init(
+                                name: "history",
+                                arguments: ["first": 10],
+                                selectionSet: [
+                                    .field(.init(name: "message"))
+                                ]
+                            )
+                        )
+                    ]
+                )
+            )
+        )
+        XCTAssertEqual(
+            try frag.stringifier.stringify(),
+            #"... on Commit { history(first: 10) { message } }"#)
+    }
+
     func testFragmentSpread() throws {
         let frag = GraphQL.fragmentSpread("frag")
         XCTAssertEqual(
@@ -92,7 +116,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFieldAlias() throws {
-        let gql = GraphQL.field(.init(alias: "grace", name: "f", arguments: ["foo": "zap"]))
+        let gql = GraphQL.field(.init(alias: "grace", name: "f", arguments: ["foo": "zap"], selectionSet: []))
         XCTAssertEqual(
             try gql.stringifier.stringify(),
             #"grace: f(foo: "zap")"#)

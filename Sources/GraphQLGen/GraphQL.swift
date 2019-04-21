@@ -51,6 +51,7 @@ indirect enum GraphQL {
         let alias: String
         let name: String
         let arguments: Arguments
+        let selectionSet: SelectionSet
     }
 
     struct Arguments {
@@ -230,15 +231,22 @@ extension Array: GraphQLArgumentValue where Element: GraphQLArgumentValue {
 }
 
 extension GraphQL.Field {
-    init(name: String, arguments: GraphQL.Arguments = .init()) {
-        self.init(alias: "", name: name, arguments: arguments)
+    init(
+        name: String,
+        arguments: GraphQL.Arguments = .init(),
+        selectionSet: GraphQL.SelectionSet = [])
+    {
+        self.init(alias: "", name: name, arguments: arguments, selectionSet: selectionSet)
     }
 
     var stringifier: Stringifier {
         return Stringifier {
             let args = try self.arguments.stringifier.stringify()
             let aliasPrefix = self.alias.isEmpty ? "" : self.alias + ": "
-            return #"\#(aliasPrefix)\#(self.name)\#(args.isEmpty ? "" : "(\(args))")"#
+            let selections = self.selectionSet.selections.isEmpty
+                ? ""
+                : " " + (try self.selectionSet.stringifier.stringify())
+            return #"\#(aliasPrefix)\#(self.name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
         }
     }
 }
