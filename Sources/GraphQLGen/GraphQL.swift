@@ -59,6 +59,10 @@ indirect enum GraphQL {
     case fragmentSpread(FragmentSpread)
     case field(Field)
 
+    func compactString() throws -> String {
+        return try Stringifier.compact.stringify(self)
+    }
+
     static func escape(_ string: String) -> String {
         let output = string.flatMap { c -> String in
             switch c {

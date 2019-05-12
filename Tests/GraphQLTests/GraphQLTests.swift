@@ -16,6 +16,11 @@ class GraphQLTests: XCTestCase {
         XCTAssertEqual(try Stringifier.compact.stringify(query), "query { f1 f2 }")
     }
 
+    func testCompactString() throws {
+        let gql = GraphQL.operation(GraphQL.query([.f1, .f2]))
+        XCTAssertEqual(try gql.compactString(), "query { f1 f2 }")
+    }
+
     func testRepository() throws {
         let query = GraphQL.query([.repo(owner: "o", name: "n", [.f1])])
         XCTAssertEqual(
