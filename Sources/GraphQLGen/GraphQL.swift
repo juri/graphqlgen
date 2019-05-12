@@ -47,9 +47,9 @@ indirect enum GraphQL {
     }
 
     struct Arguments {
-        let args: [String: Any]
+        let args: [(String, Any)]
 
-        init(_ args: [String: Any]) {
+        init(_ args: [(String, Any)]) {
             self.args = args
         }
     }
@@ -188,7 +188,7 @@ struct GraphQLTypeError: Error {}
 
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
     init(dictionaryLiteral elements: (String, Any)...) {
-        self.init(Dictionary(uniqueKeysWithValues: elements))
+        self.init(elements)
     }
 }
 
