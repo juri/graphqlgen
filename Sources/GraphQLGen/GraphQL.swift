@@ -73,11 +73,11 @@ indirect enum GraphQL {
     }
 
     static func stringify(_ items: [GraphQL]) throws -> String {
-        return try items.map { try Stringifiers.compact.stringify($0) }.joined(separator: " ")
+        return try items.map { try Stringifier.compact.stringify($0) }.joined(separator: " ")
     }
 
-    static func encodePair(key: String, value: GraphQLArgumentValue) -> String {
-        let encodedValue = value.asGraphQLValue()
+    static func encodePair(key: String, value: GraphQLArgumentValue) throws -> String {
+        let encodedValue = try value.asGraphQLValue()
         return "\(key): \(encodedValue)"
     }
 
@@ -104,44 +104,51 @@ extension GraphQL.SelectionSet: ExpressibleByArrayLiteral {
 }
 
 protocol GraphQLArgumentValue {
-    func asGraphQLValue() -> String
+    func asGraphQLValue() throws -> String
 }
 
 extension String: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
+    func asGraphQLValue() throws -> String {
         return #""\#(GraphQL.escape(self))""#
     }
 }
 
 extension Int: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
+    func asGraphQLValue() throws -> String {
         return "\(self)"
     }
 }
 
 extension Float: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
+    func asGraphQLValue() throws -> String {
         return "\(self)"
     }
 }
 
 extension Bool: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
+    func asGraphQLValue() throws -> String {
         return "\(self)"
     }
 }
 
 extension Dictionary: GraphQLArgumentValue where Key == String, Value: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
-        let encodedPairs = self.map(GraphQL.encodePair(key:value:))
+    func asGraphQLValue() throws -> String {
+        let encodedPairs = try self.map(GraphQL.encodePair(key:value:))
         return #"{\#(encodedPairs.joined(separator: " "))}"#
     }
 }
 
 extension Array: GraphQLArgumentValue where Element: GraphQLArgumentValue {
-    func asGraphQLValue() -> String {
-        let encodedValues = self.map { $0.asGraphQLValue() }
+    func asGraphQLValue() throws -> String {
+        let encodedValues = try self.map { try $0.asGraphQLValue() }
         return #"[\#(encodedValues.joined(separator: " "))]"#
+    }
+}
+
+extension GraphQL.Arguments: GraphQLArgumentValue {
+    func asGraphQLValue() throws -> String {
+        let encodedPairs = try self.args.map { try stringifyArgument(key: $0, value: $1) }
+        return #"{\#(encodedPairs.joined(separator: " "))}"#
     }
 }
 
@@ -167,7 +174,7 @@ extension GraphQL.Field {
 private func stringifyArgument(value: Any) throws -> String {
     switch value {
     case let gql as GraphQLArgumentValue:
-        return gql.asGraphQLValue()
+        return try gql.asGraphQLValue()
     case let arr as [Any]:
         let formatted = try arr.map(stringifyArgument(value:)).joined(separator: " ")
         return #"[\#(formatted)]"#
@@ -204,27 +211,48 @@ struct Stringifier<A> {
     var stringify: (A) throws -> String
 }
 
-enum Stringifiers {
+extension Stringifier where A == GraphQL {
     static let compact = Stringifier(stringify: compactGraphQLStringify)
-    static let compactArgs = Stringifier(stringify: compactArgsStringify)
-    static let compactField = Stringifier(stringify: compactFieldStringify)
+}
+
+extension Stringifier where A == GraphQL.Arguments {
+    static let compact = Stringifier(stringify: compactArgsStringify)
+}
+
+extension Stringifier where A == GraphQL.Field {
+    static let compact = Stringifier(stringify: compactFieldStringify)
+}
+
+extension Stringifier where A == GraphQL.FragmentSpread {
     static let normal = Stringifier(stringify: normalFragmentSpreadStringify)
-    static let compactInlineFragment = Stringifier(stringify: compactInlineFragmentStringify)
-    static let compactOp = Stringifier(stringify: compactOpStringify)
-    static let compactSelection = Stringifier(stringify: compactSelectionStringify)
-    static let compactSelSet = Stringifier(stringify: compactSelSetStringify)
+}
+
+extension Stringifier where A == GraphQL.InlineFragment {
+    static let compact = Stringifier(stringify: compactInlineFragmentStringify)
+}
+
+extension Stringifier where A == GraphQL.Operation {
+    static let compact = Stringifier(stringify: compactOpStringify)
+}
+
+extension Stringifier where A == GraphQL.Selection {
+    static let compact = Stringifier(stringify: compactSelectionStringify)
+}
+
+extension Stringifier where A == GraphQL.SelectionSet {
+    static let compact = Stringifier(stringify: compactSelSetStringify)
 }
 
 private func compactGraphQLStringify(gql: GraphQL) throws -> String {
     switch gql {
     case let .operation(op):
-        return try Stringifiers.compactOp.stringify(op)
+        return try Stringifier.compact.stringify(op)
     case let .inlineFragment(inlineFragment):
-        return try Stringifiers.compactInlineFragment.stringify(inlineFragment)
+        return try Stringifier.compact.stringify(inlineFragment)
     case let .fragmentSpread(fs):
-        return try Stringifiers.normal.stringify(fs)
+        return try Stringifier.normal.stringify(fs)
     case let .field(field):
-        return try Stringifiers.compactField.stringify(field)
+        return try Stringifier.compact.stringify(field)
     }
 }
 
@@ -234,11 +262,11 @@ private func compactArgsStringify(a: GraphQL.Arguments) throws -> String {
 }
 
 private func compactFieldStringify(field: GraphQL.Field) throws -> String {
-    let args = try Stringifiers.compactArgs.stringify(field.arguments)
+    let args = try Stringifier.compact.stringify(field.arguments)
     let aliasPrefix = field.alias.isEmpty ? "" : field.alias + ": "
     let selections = field.selectionSet.selections.isEmpty
         ? ""
-        : " " + (try Stringifiers.compactSelSet.stringify(field.selectionSet))
+        : " " + (try Stringifier.compact.stringify(field.selectionSet))
     return #"\#(aliasPrefix)\#(field.name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
 }
 
@@ -248,13 +276,12 @@ private func normalFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws 
 
 private func compactOpStringify(op: GraphQL.Operation) throws -> String {
     let name = op.name.isEmpty ? "" : " " + op.name
-    let selections = try Stringifiers.compactSelSet.stringify(op.selectionSet)
+    let selections = try Stringifier.compact.stringify(op.selectionSet)
     return #"\#(op.type.rawValue)\#(name) \#(selections)"#
 }
 
 private func compactInlineFragmentStringify(frag: GraphQL.InlineFragment) throws -> String {
-    //        let cstr = "asdf"
-    let cstr = try Stringifiers.compactSelSet.stringify(frag.selectionSet)
+    let cstr = try Stringifier.compact.stringify(frag.selectionSet)
     let typeCondition = frag.namedType.isEmpty ? "" : "... on \(frag.namedType) "
     return "\(typeCondition)\(cstr)"
 }
@@ -262,24 +289,17 @@ private func compactInlineFragmentStringify(frag: GraphQL.InlineFragment) throws
 private func compactSelectionStringify(sel: GraphQL.Selection) throws -> String {
     switch sel {
     case let .field(field):
-        return try Stringifiers.compactField.stringify(field)
+        return try Stringifier.compact.stringify(field)
     case let .fragmentSpread(fragmentSpread):
-        return try Stringifiers.normal.stringify(fragmentSpread)
+        return try Stringifier.normal.stringify(fragmentSpread)
     case let .inlineFragment(inlineFragment):
-        return try Stringifiers.compactInlineFragment.stringify(inlineFragment)
+        return try Stringifier.compact.stringify(inlineFragment)
     }
 }
 
 private func compactSelSetStringify(selSet: GraphQL.SelectionSet) throws -> String {
-//    return "foo"
     let selections: [GraphQL.Selection] = selSet.selections
-    let stringifiedSelections: [String] = try selections.map { (s: GraphQL.Selection) throws -> String in try Stringifiers.compactSelection.stringify(s) }
+    let stringifiedSelections: [String] = try selections.map { (s: GraphQL.Selection) throws -> String in try Stringifier.compact.stringify(s) }
     let joined: String = stringifiedSelections.joined(separator: " ")
-//    return "asdf"
     return #"{ \#(joined) }"#
-
-    //        let s = try selSet.selections
-    //            .map { try Stringifiers.compactSelection.stringify($0) }
-    //            .joined(separator: " ")
-    //        return #"{ \#(s) }"#
 }
