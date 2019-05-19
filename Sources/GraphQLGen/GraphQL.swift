@@ -76,10 +76,6 @@ indirect enum GraphQL {
         return String(output)
     }
 
-    static func stringify(_ items: [GraphQL]) throws -> String {
-        return try items.map { try Stringifier.compact.stringify($0) }.joined(separator: " ")
-    }
-
     static func encodePair(key: String, value: Any) throws -> String {
         let encodedValue = try stringifyArgument(value: value)
         return "\(key): \(encodedValue)"
