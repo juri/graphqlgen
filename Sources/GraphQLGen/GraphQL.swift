@@ -5,8 +5,6 @@
 //  Created by Juri Pakaste on 17/04/2019.
 //
 
-import Foundation
-
 indirect enum GraphQL {
     enum OperationType: String {
         case query
