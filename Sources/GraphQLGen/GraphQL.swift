@@ -80,8 +80,8 @@ indirect enum GraphQL {
         return try items.map { try Stringifier.compact.stringify($0) }.joined(separator: " ")
     }
 
-    static func encodePair(key: String, value: GraphQLArgumentValue) throws -> String {
-        let encodedValue = try value.asGraphQLValue()
+    static func encodePair(key: String, value: Any) throws -> String {
+        let encodedValue = try stringifyArgument(value: value)
         return "\(key): \(encodedValue)"
     }
 
@@ -107,55 +107,6 @@ extension GraphQL.SelectionSet: ExpressibleByArrayLiteral {
     }
 }
 
-protocol GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String
-}
-
-extension String: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        return #""\#(GraphQL.escape(self))""#
-    }
-}
-
-extension Int: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        return "\(self)"
-    }
-}
-
-extension Float: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        return "\(self)"
-    }
-}
-
-extension Bool: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        return "\(self)"
-    }
-}
-
-extension Dictionary: GraphQLArgumentValue where Key == String, Value: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        let encodedPairs = try self.map(GraphQL.encodePair(key:value:))
-        return #"{\#(encodedPairs.joined(separator: " "))}"#
-    }
-}
-
-extension Array: GraphQLArgumentValue where Element: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        let encodedValues = try self.map { try $0.asGraphQLValue() }
-        return #"[\#(encodedValues.joined(separator: " "))]"#
-    }
-}
-
-extension GraphQL.Arguments: GraphQLArgumentValue {
-    func asGraphQLValue() throws -> String {
-        let encodedPairs = try self.args.map { try stringifyArgument(key: $0, value: $1) }
-        return #"{\#(encodedPairs.joined(separator: " "))}"#
-    }
-}
-
 extension GraphQL.Field {
     init(
         name: String,
@@ -177,16 +128,25 @@ extension GraphQL.Field {
 
 private func stringifyArgument(value: Any) throws -> String {
     switch value {
-    case let gql as GraphQLArgumentValue:
-        return try gql.asGraphQLValue()
-    case let arr as [Any]:
-        let formatted = try arr.map(stringifyArgument(value:)).joined(separator: " ")
-        return #"[\#(formatted)]"#
+    case let s as String:
+        return normalStringStringify(s)
+    case let i as Int:
+        return normalIntStringify(i)
+    case let f as Float:
+        return normalFloatStringify(f)
+    case let d as Double:
+        return normalDoubleStringify(d)
+    case let b as Bool:
+        return normalBoolStringify(b)
     case let dict as [String: Any]:
-        let formatted = try dict.map(stringifyArgument(key:value:)).joined(separator: " ")
-        return #"{\#(formatted)}"#
+        return try compactDictStringify(dict)
+    case let arr as [Any]:
+        return try compactArrayStringify(arr)
+    case let args as GraphQL.Arguments:
+        let formatted = try compactArgsStringify(a: args)
+        return "{\(formatted)}"
     default:
-        throw GraphQLTypeError()
+        throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
     }
 }
 
@@ -195,7 +155,9 @@ private func stringifyArgument(key: String, value: Any) throws -> String {
     return "\(key): \(vstr)"
 }
 
-struct GraphQLTypeError: Error {}
+struct GraphQLTypeError: Error {
+    let message: String
+}
 
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
     init(dictionaryLiteral elements: (String, Any)...) {
@@ -213,6 +175,10 @@ extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
 
 struct Stringifier<A> {
     var stringify: (A) throws -> String
+}
+
+extension Stringifier where A == String {
+    static let normal = Stringifier(stringify: normalStringStringify)
 }
 
 extension Stringifier where A == GraphQL {
@@ -245,6 +211,38 @@ extension Stringifier where A == GraphQL.Selection {
 
 extension Stringifier where A == GraphQL.SelectionSet {
     static let compact = Stringifier(stringify: compactSelSetStringify)
+}
+
+// MARK: -
+
+private func normalStringStringify(_ s: String) -> String {
+    return #""\#(GraphQL.escape(s))""#
+}
+
+private func normalIntStringify(_ i: Int) -> String {
+    return "\(i)"
+}
+
+private func normalFloatStringify(_ f: Float) -> String {
+    return "\(f)"
+}
+
+private func normalDoubleStringify(_ d: Double) -> String {
+    return "\(d)"
+}
+
+private func normalBoolStringify(_ b: Bool) -> String {
+    return "\(b)"
+}
+
+private func compactDictStringify(_ d: [String: Any]) throws -> String {
+    let encodedPairs = try d.map(GraphQL.encodePair(key:value:))
+    return #"{\#(encodedPairs.joined(separator: " "))}"#
+}
+
+private func compactArrayStringify(_ a: [Any]) throws -> String {
+    let encodedValues = try a.map(stringifyArgument(value:))
+    return #"[\#(encodedValues.joined(separator: " "))]"#
 }
 
 private func compactGraphQLStringify(gql: GraphQL) throws -> String {
