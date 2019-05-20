@@ -101,6 +101,12 @@ extension GraphQL.SelectionSet: ExpressibleByArrayLiteral {
     }
 }
 
+extension GraphQL.SelectionSet {
+    init(selectionNames: [String]) {
+        self.init(selections: selectionNames.map { GraphQL.Selection.field(.init(name: $0)) })
+    }
+}
+
 extension GraphQL.Field {
     init(
         name: String,
