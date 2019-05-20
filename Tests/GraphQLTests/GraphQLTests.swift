@@ -21,6 +21,26 @@ class GraphQLTests: XCTestCase {
         XCTAssertEqual(try gql.compactString(), "query { f1 f2 }")
     }
 
+    func testOperationInit() throws {
+        let gql = GraphQL(GraphQL.query([.f1, .f2]))
+        XCTAssertEqual(try Stringifier.compact.stringify(gql), "query { f1 f2 }")
+    }
+
+    func testInlineFragmentInit() throws {
+        let gql = GraphQL(GraphQL.InlineFragment(namedType: "Foo", selectionSet: .init(selectionNames: ["bar", "zot"])))
+        XCTAssertEqual(try Stringifier.compact.stringify(gql), "... on Foo { bar zot }")
+    }
+
+    func testFragmentSpreadInit() throws {
+        let gql = GraphQL(GraphQL.FragmentSpread(name: "spread"))
+        XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread")
+    }
+
+    func testFieldInit() throws {
+        let gql = GraphQL(GraphQL.Field(name: "f1"))
+        XCTAssertEqual(try Stringifier.compact.stringify(gql), "f1")
+    }
+
     func testRepository() throws {
         let query = GraphQL.query([.repo(owner: "o", name: "n", [.f1])])
         XCTAssertEqual(

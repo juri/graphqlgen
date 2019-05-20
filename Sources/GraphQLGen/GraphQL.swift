@@ -57,6 +57,22 @@ indirect enum GraphQL {
     case fragmentSpread(FragmentSpread)
     case field(Field)
 
+    init(_ op: Operation) {
+        self = .operation(op)
+    }
+
+    init(_ inlineFrag: InlineFragment) {
+        self = .inlineFragment(inlineFrag)
+    }
+
+    init(_ fragmentSpread: FragmentSpread) {
+        self = .fragmentSpread(fragmentSpread)
+    }
+
+    init(_ field: Field) {
+        self = .field(field)
+    }
+
     func compactString() throws -> String {
         return try Stringifier.compact.stringify(self)
     }
