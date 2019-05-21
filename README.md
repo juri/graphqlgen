@@ -36,8 +36,7 @@ To make it more compact there's some convenience methods:
 
 ```swift
 import GraphQLGen
-let op = GraphQL.query([.field(.init(name: "message"))])
-let gql = GraphQL.operation(op)
+let gql = GraphQL(GraphQL.query([.field(.init(name: "message"))]))
 let str = try gql.compactString()
 ```
 
@@ -49,7 +48,6 @@ extension GraphQL.Field {
     static var message = GraphQL.Field { return .init(name: "message") }
 }
 
-let op = GraphQL.query([.field(.message)])
-let gql = GraphQL.operation(op)
+let gql = GraphQL(GraphQL.query([.field(.message)]))
 let str = try gql.compactString()
 ```
