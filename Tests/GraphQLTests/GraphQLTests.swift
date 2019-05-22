@@ -10,6 +10,28 @@ private extension GraphQL.Selection {
     }
 }
 
+class GraphQLNameTests: XCTestCase {
+    func testNameEmpty() throws {
+        XCTAssertNil(GraphQL.Name(value: ""))
+    }
+
+    func testNameOneValid() throws {
+        XCTAssertEqual(GraphQL.Name(value: "a")?.value, "a")
+    }
+
+    func testNameOneInvalid() throws {
+        XCTAssertNil(GraphQL.Name(value: "!"))
+    }
+
+    func testNameNextValid() throws {
+        XCTAssertEqual(GraphQL.Name(value: "a1")?.value, "a1")
+    }
+
+    func testNameNextInvalid() throws {
+        XCTAssertNil(GraphQL.Name(value: "a!"))
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])

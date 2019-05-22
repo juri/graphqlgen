@@ -9,6 +9,22 @@
 ///
 /// `GraphQL` is a nested enum where the payload of each case is represented by a nested struct.
 indirect enum GraphQL {
+    /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
+    ///
+    /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
+    public struct Name {
+        public let value: String
+
+        public init?(value: String) {
+            guard
+                let first = value.first,
+                nameHeadChars.contains(first),
+                value.dropFirst().allSatisfy(nameRestChars.contains)
+            else { return nil }
+            self.value = value
+        }
+    }
+
     /// An operation.
     ///
     /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
@@ -359,3 +375,8 @@ private func compactSelSetStringify(selSet: GraphQL.SelectionSet) throws -> Stri
     let joined: String = stringifiedSelections.joined(separator: " ")
     return #"{ \#(joined) }"#
 }
+
+private let nameHeadChars: Set<Character> = ["_", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+private let digits: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+private let nameRestChars = nameHeadChars.union(digits)
+
