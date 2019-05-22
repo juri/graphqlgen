@@ -46,6 +46,7 @@ indirect enum GraphQL {
     /// A field.
     ///
     /// - SeeAlso: [2.5 Fields](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fields)
+    /// - SeeAlso: [2.7 Field Alias](https://graphql.github.io/graphql-spec/June2018/#sec-Field-Alias)
     struct Field {
         let alias: String
         let name: String
