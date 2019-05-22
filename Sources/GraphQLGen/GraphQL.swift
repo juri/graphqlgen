@@ -5,38 +5,47 @@
 //  Created by Juri Pakaste on 17/04/2019.
 //
 
+/// `GraphQL` represents an element in a GraphQL document.
+///
+/// `GraphQL` is a nested enum where the payload of each case is represented by a nested struct.
 indirect enum GraphQL {
-    enum OperationType: String {
-        case query
-        case mutation
-        case subscription
-    }
-
-    enum Selection {
-        case field(Field)
-        case inlineFragment(InlineFragment)
-        case fragmentSpread(FragmentSpread)
-    }
-
-    struct SelectionSet {
-        let selections: [Selection]
-    }
-
-    struct InlineFragment {
-        let namedType: String
-        let selectionSet: SelectionSet
-    }
-
-    struct FragmentSpread {
-        let name: String
-    }
-
+    /// An operation.
+    ///
+    /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
     struct Operation {
         let type: OperationType
         let name: String
         let selectionSet: SelectionSet
     }
 
+    /// The type of an `Operation`.
+    ///
+    /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
+    enum OperationType: String {
+        case query
+        case mutation
+        case subscription
+    }
+
+    /// One selection in a `SelectionSet`.
+    ///
+    /// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
+    enum Selection {
+        case field(Field)
+        case inlineFragment(InlineFragment)
+        case fragmentSpread(FragmentSpread)
+    }
+
+    /// A list of selections.
+    ///
+    /// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
+    struct SelectionSet {
+        let selections: [Selection]
+    }
+
+    /// A field.
+    ///
+    /// - SeeAlso: [2.5 Fields](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fields)
     struct Field {
         let alias: String
         let name: String
@@ -44,6 +53,9 @@ indirect enum GraphQL {
         let selectionSet: SelectionSet
     }
 
+    /// Arguments.
+    ///
+    /// - SeeAlso: [2.6 Arguments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Arguments)
     struct Arguments {
         let args: [(String, Any)]
 
@@ -52,27 +64,47 @@ indirect enum GraphQL {
         }
     }
 
+    /// A fragment spread.
+    ///
+    /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+    struct FragmentSpread {
+        let name: String
+    }
+
+    /// An inline fragment.
+    ///
+    /// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
+    struct InlineFragment {
+        let namedType: String
+        let selectionSet: SelectionSet
+    }
+
     case operation(Operation)
     case inlineFragment(InlineFragment)
     case fragmentSpread(FragmentSpread)
     case field(Field)
 
+    /// Initialize a `GraphQL` as an `operation` with the provided content.
     init(_ op: Operation) {
         self = .operation(op)
     }
 
+    /// Initialize a `GraphQL` as an `inlineFragment` with the provided content.
     init(_ inlineFrag: InlineFragment) {
         self = .inlineFragment(inlineFrag)
     }
 
+    /// Initialize a `GraphQL` as a `fragmentSpread` with the provided content.
     init(_ fragmentSpread: FragmentSpread) {
         self = .fragmentSpread(fragmentSpread)
     }
 
+    /// Initialize a `GraphQL` as a `field` with the provided content.
     init(_ field: Field) {
         self = .field(field)
     }
 
+    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
     func compactString() throws -> String {
         return try Stringifier.compact.stringify(self)
     }
@@ -95,10 +127,12 @@ indirect enum GraphQL {
         return "\(key): \(encodedValue)"
     }
 
+    /// Constructs a `GraphQL.Operation` with type `query`.
     static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
         return .init(type: .query, name: name, selections: selections)
     }
 
+    /// Constructs a `GraphQL.Operation` with type `query`.
     static func query(_ selections: [GraphQL.Selection]) -> GraphQL.Operation {
         return .init(type: .query, name: "", selections: selections)
     }
@@ -189,6 +223,9 @@ extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
 
 // MARK: - Stringification
 
+/// `Stringifier` is a protocol witness for stringifying a `GraphQL`.
+/// There are implementations for the various structures as static properties
+/// in the appropriately typed extensions.
 struct Stringifier<A> {
     var stringify: (A) throws -> String
 }
