@@ -16,11 +16,7 @@ public indirect enum GraphQL {
         public let value: String
 
         public init?(value: String) {
-            guard
-                let first = value.first,
-                nameHeadChars.contains(first),
-                value.dropFirst().allSatisfy(nameRestChars.contains)
-            else { return nil }
+            guard validateName(value) else { return nil }
             self.value = value
         }
     }
@@ -379,3 +375,11 @@ private let nameHeadChars: Set<Character> = ["_", "a", "b", "c", "d", "e", "f", 
 private let digits: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 private let nameRestChars = nameHeadChars.union(digits)
 
+private func validateName(_ value: String) -> Bool {
+    guard
+        let first = value.first,
+        nameHeadChars.contains(first),
+        value.dropFirst().allSatisfy(nameRestChars.contains)
+    else { return false }
+    return true
+}
