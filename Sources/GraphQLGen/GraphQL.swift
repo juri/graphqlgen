@@ -13,10 +13,18 @@ public indirect enum GraphQL {
     ///
     /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
     public struct Name {
+        public struct BadValue: Error {
+            public let value: String
+        }
+
         public let value: String
 
-        public init?(value: String) {
+        public init?(check value: String) {
             guard validateName(value) else { return nil }
+            self.value = value
+        }
+
+        public init(value: String) {
             self.value = value
         }
     }
@@ -26,7 +34,7 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
     public struct Operation {
         public let type: OperationType
-        public let name: String
+        public let name: Name?
         public let selectionSet: SelectionSet
     }
 
@@ -60,8 +68,8 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.5 Fields](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fields)
     /// - SeeAlso: [2.7 Field Alias](https://graphql.github.io/graphql-spec/June2018/#sec-Field-Alias)
     public struct Field {
-        public let alias: String
-        public let name: String
+        public let alias: Name?
+        public let name: Name
         public let arguments: Arguments
         public let selectionSet: SelectionSet
     }
@@ -70,10 +78,30 @@ public indirect enum GraphQL {
     ///
     /// - SeeAlso: [2.6 Arguments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Arguments)
     public struct Arguments {
-        public let args: [(String, Any)]
+        public let args: [(Name, Any)]
 
-        public init(_ args: [(String, Any)]) {
+        public init(_ args: [(Name, Any)]) {
             self.args = args
+        }
+    }
+
+    /// Fragment name.
+    ///
+    /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+    public struct FragmentName {
+        public struct BadValue: Error {
+            public let value: String
+        }
+
+        public let value: String
+
+        public init?(check value: String) {
+            guard validateFragmentName(value) else { return nil }
+            self.value = value
+        }
+
+        public init(value: String) {
+            self.value = value
         }
     }
 
@@ -81,7 +109,7 @@ public indirect enum GraphQL {
     ///
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
     public struct FragmentSpread {
-        public let name: String
+        public let name: FragmentName
     }
 
     /// An inline fragment.
@@ -141,19 +169,35 @@ public indirect enum GraphQL {
     }
 
     /// Constructs a `GraphQL.Operation` with type `query`.
-    public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
-        return .init(type: .query, name: name, selections: selections)
+    public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation? {
+        return GraphQL.Operation(type: .query, name: name, selections: selections)
     }
 
     /// Constructs a `GraphQL.Operation` with type `query`.
     public static func query(_ selections: [GraphQL.Selection]) -> GraphQL.Operation {
-        return .init(type: .query, name: "", selections: selections)
+        return .init(type: .query, selections: selections)
+    }
+}
+
+extension GraphQL.Name: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(value: value)
+    }
+}
+
+extension GraphQL.FragmentName: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(value: value)
     }
 }
 
 extension GraphQL.Operation {
-    public init(type: GraphQL.OperationType, name: String = "", selections: [GraphQL.Selection] = []) {
-        self.init(type: type, name: "", selectionSet: .init(selections: selections))
+    public init(type: GraphQL.OperationType, selections: [GraphQL.Selection] = []) {
+        self.init(type: type, name: nil, selectionSet: .init(selections: selections))
+    }
+
+    public init?(type: GraphQL.OperationType, name: String, selections: [GraphQL.Selection] = []) {
+        self.init(type: type, name: GraphQL.Name(value: name), selectionSet: .init(selections: selections))
     }
 }
 
@@ -171,20 +215,33 @@ extension GraphQL.SelectionSet {
 
 extension GraphQL.Field {
     public init(
-        name: String,
+        name: GraphQL.Name,
         arguments: GraphQL.Arguments = .init(),
         selectionSet: GraphQL.SelectionSet = [])
     {
-        self.init(alias: "", name: name, arguments: arguments, selectionSet: selectionSet)
+        self.init(alias: nil, name: name, arguments: arguments, selectionSet: selectionSet)
     }
 
     public init(
-        alias: String = "",
+        alias: GraphQL.Name? = nil,
+        name: GraphQL.Name,
+        arguments: GraphQL.Arguments = .init(),
+        selections: [GraphQL.Selection] = [])
+    {
+        self.init(alias: alias, name: name, arguments: arguments, selectionSet: .init(selections: selections))
+    }
+
+    public init(
+        alias: String? = nil,
         name: String,
         arguments: GraphQL.Arguments = .init(),
         selections: [GraphQL.Selection] = [])
     {
-        self.init(alias: "", name: name, arguments: arguments, selectionSet: .init(selections: selections))
+        self.init(
+            alias: alias.map(GraphQL.Name.init(value:)),
+            name: GraphQL.Name(value: name),
+            arguments: arguments,
+            selectionSet: .init(selections: selections))
     }
 }
 
@@ -212,9 +269,10 @@ private func stringifyArgument(value: Any) throws -> String {
     }
 }
 
-private func stringifyArgument(key: String, value: Any) throws -> String {
+private func stringifyArgument(name: GraphQL.Name, value: Any) throws -> String {
     let vstr = try stringifyArgument(value: value)
-    return "\(key): \(vstr)"
+    let nstr = try normalNameStringify(name)
+    return "\(nstr): \(vstr)"
 }
 
 public struct GraphQLTypeError: Error {
@@ -223,13 +281,13 @@ public struct GraphQLTypeError: Error {
 
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (String, Any)...) {
-        self.init(elements)
+        self.init(elements.map { (GraphQL.Name(value: $0.0), $0.1) })
     }
 }
 
 extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        self.init(name: value)
+        self.init(name: GraphQL.FragmentName(value: value))
     }
 }
 
@@ -250,12 +308,20 @@ public extension Stringifier where A == GraphQL {
     static let compact = Stringifier(stringify: compactGraphQLStringify)
 }
 
+public extension Stringifier where A == GraphQL.Name {
+    static let normal = Stringifier(stringify: normalNameStringify)
+}
+
 public extension Stringifier where A == GraphQL.Arguments {
     static let compact = Stringifier(stringify: compactArgsStringify)
 }
 
 public extension Stringifier where A == GraphQL.Field {
     static let compact = Stringifier(stringify: compactFieldStringify)
+}
+
+public extension Stringifier where A == GraphQL.FragmentName {
+    static let normal = Stringifier(stringify: normalFragmentNameStringify)
 }
 
 public extension Stringifier where A == GraphQL.FragmentSpread {
@@ -323,26 +389,38 @@ private func compactGraphQLStringify(gql: GraphQL) throws -> String {
     }
 }
 
+private func normalNameStringify(_ n: GraphQL.Name) throws -> String {
+    guard validateName(n.value) else { throw GraphQL.Name.BadValue(value: n.value) }
+    return n.value
+}
+
 private func compactArgsStringify(a: GraphQL.Arguments) throws -> String {
-    let args = try a.args.map(stringifyArgument(key:value:))
+    let args = try a.args.map(stringifyArgument(name:value:))
     return args.joined(separator: " ")
 }
 
 private func compactFieldStringify(field: GraphQL.Field) throws -> String {
     let args = try Stringifier.compact.stringify(field.arguments)
-    let aliasPrefix = field.alias.isEmpty ? "" : field.alias + ": "
+    let name = try Stringifier.normal.stringify(field.name)
+    let aliasPrefix = try field.alias.map { (try Stringifier.normal.stringify($0) + ": ") } ?? ""
     let selections = field.selectionSet.selections.isEmpty
         ? ""
         : " " + (try Stringifier.compact.stringify(field.selectionSet))
-    return #"\#(aliasPrefix)\#(field.name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
+    return #"\#(aliasPrefix)\#(name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
+}
+
+private func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
+    guard validateFragmentName(n.value) else { throw GraphQL.FragmentName.BadValue(value: n.value) }
+    return n.value
 }
 
 private func normalFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
-    return "... \(frag.name)"
+    let name = try Stringifier.normal.stringify(frag.name)
+    return "... \(name)"
 }
 
 private func compactOpStringify(op: GraphQL.Operation) throws -> String {
-    let name = op.name.isEmpty ? "" : " " + op.name
+    let name = try op.name.map { " " + (try Stringifier.normal.stringify($0)) } ?? ""
     let selections = try Stringifier.compact.stringify(op.selectionSet)
     return #"\#(op.type.rawValue)\#(name) \#(selections)"#
 }
@@ -382,4 +460,8 @@ private func validateName(_ value: String) -> Bool {
         value.dropFirst().allSatisfy(nameRestChars.contains)
     else { return false }
     return true
+}
+
+private func validateFragmentName(_ value: String) -> Bool {
+    return validateName(value) && value != "on"
 }

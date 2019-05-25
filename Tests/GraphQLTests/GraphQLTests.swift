@@ -12,23 +12,23 @@ private extension GraphQL.Selection {
 
 class GraphQLNameTests: XCTestCase {
     func testNameEmpty() throws {
-        XCTAssertNil(GraphQL.Name(value: ""))
+        XCTAssertNil(GraphQL.Name(check: ""))
     }
 
     func testNameOneValid() throws {
-        XCTAssertEqual(GraphQL.Name(value: "a")?.value, "a")
+        XCTAssertEqual(GraphQL.Name(check: "a")?.value, "a")
     }
 
     func testNameOneInvalid() throws {
-        XCTAssertNil(GraphQL.Name(value: "!"))
+        XCTAssertNil(GraphQL.Name(check: "!"))
     }
 
     func testNameNextValid() throws {
-        XCTAssertEqual(GraphQL.Name(value: "a1")?.value, "a1")
+        XCTAssertEqual(GraphQL.Name(check: "a1")?.value, "a1")
     }
 
     func testNameNextInvalid() throws {
-        XCTAssertNil(GraphQL.Name(value: "a!"))
+        XCTAssertNil(GraphQL.Name(check: "a!"))
     }
 }
 
@@ -164,5 +164,25 @@ class GraphQLTests: XCTestCase {
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"grace: f(foo: "zap")"#)
+    }
+
+    func testInvalidFieldName() throws {
+        let gql = GraphQL.field(.init(name: "!!!"))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+
+    func testInvalidFragmentName() throws {
+        let gql = GraphQL.fragmentSpread(.init(name: "?"))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+
+    func testInvalidFragmentNameOn() throws {
+        let gql = GraphQL.fragmentSpread(.init(name: "on"))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+
+    func testInvalidArgumentName() throws {
+        let gql = GraphQL.field(.init(name: "valid", arguments: ["?": "invalid"], selectionSet: []))
+        XCTAssertThrowsError(try gql.compactString())
     }
 }
