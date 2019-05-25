@@ -12,7 +12,9 @@ public indirect enum GraphQL {
     /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
     ///
     /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
-    public struct Name {
+    public typealias Name = ValidatedName<NameValidator>
+
+    public struct ValidatedName<V: Validator> where V.Value == String {
         public struct BadValue: Error {
             public let value: String
         }
@@ -20,7 +22,7 @@ public indirect enum GraphQL {
         public let value: String
 
         public init?(check value: String) {
-            guard validateName(value) else { return nil }
+            guard V.validate(value) else { return nil }
             self.value = value
         }
 
@@ -88,22 +90,7 @@ public indirect enum GraphQL {
     /// Fragment name.
     ///
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
-    public struct FragmentName {
-        public struct BadValue: Error {
-            public let value: String
-        }
-
-        public let value: String
-
-        public init?(check value: String) {
-            guard validateFragmentName(value) else { return nil }
-            self.value = value
-        }
-
-        public init(value: String) {
-            self.value = value
-        }
-    }
+    public typealias FragmentName = ValidatedName<FragmentNameValidator>
 
     /// A fragment spread.
     ///
@@ -179,13 +166,7 @@ public indirect enum GraphQL {
     }
 }
 
-extension GraphQL.Name: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        self.init(value: value)
-    }
-}
-
-extension GraphQL.FragmentName: ExpressibleByStringLiteral {
+extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value: value)
     }
@@ -244,6 +225,24 @@ extension GraphQL.Field {
             selectionSet: .init(selections: selections))
     }
 }
+
+public protocol Validator {
+    associatedtype Value
+    static func validate(_ value: Value) -> Bool
+}
+
+public struct NameValidator: Validator {
+    public static func validate(_ name: String) -> Bool {
+        return validateName(name)
+    }
+}
+
+public struct FragmentNameValidator: Validator {
+    public static func validate(_ name: String) -> Bool {
+        return validateFragmentName(name)
+    }
+}
+
 
 private func stringifyArgument(value: Any) throws -> String {
     switch value {
