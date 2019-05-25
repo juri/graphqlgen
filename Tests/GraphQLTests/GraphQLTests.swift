@@ -46,6 +46,36 @@ class FragmentNameTests: XCTestCase {
     }
 }
 
+class FragmentDefinitionTests: XCTestCase {
+    func testValid() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentDefinition(
+                name: "frag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
+        XCTAssertEqual(try gql.compactString(), "fragment frag on type { sel1 sel2 }")
+    }
+
+    func testInvalidName() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentDefinition(
+                name: "fr*ag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+
+    func testInvalidTypeCondition() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentDefinition(
+                name: "frag", typeCondition: "ty+pe", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+
+    func testInvalidFieldNames() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentDefinition(
+                name: "frag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "se.l2"])))
+        XCTAssertThrowsError(try gql.compactString())
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])

@@ -99,6 +99,15 @@ public indirect enum GraphQL {
         public let name: FragmentName
     }
 
+    /// A fragment definition.
+    ///
+    /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+    public struct FragmentDefinition {
+        let name: FragmentName
+        let typeCondition: Name
+        let selectionSet: SelectionSet
+    }
+
     /// An inline fragment.
     ///
     /// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
@@ -111,6 +120,7 @@ public indirect enum GraphQL {
     case inlineFragment(InlineFragment)
     case fragmentSpread(FragmentSpread)
     case field(Field)
+    case fragmentDefinition(FragmentDefinition)
 
     /// Initialize a `GraphQL` as an `operation` with the provided content.
     public init(_ op: Operation) {
@@ -125,6 +135,10 @@ public indirect enum GraphQL {
     /// Initialize a `GraphQL` as a `fragmentSpread` with the provided content.
     public init(_ fragmentSpread: FragmentSpread) {
         self = .fragmentSpread(fragmentSpread)
+    }
+
+    public init(_ fragmentDefinition: FragmentDefinition) {
+        self = .fragmentDefinition(fragmentDefinition)
     }
 
     /// Initialize a `GraphQL` as a `field` with the provided content.
@@ -327,6 +341,10 @@ public extension Stringifier where A == GraphQL.FragmentSpread {
     static let normal = Stringifier(stringify: normalFragmentSpreadStringify)
 }
 
+public extension Stringifier where A == GraphQL.FragmentDefinition {
+    static let compact = Stringifier(stringify: compactFragmentDefStringify)
+}
+
 public extension Stringifier where A == GraphQL.InlineFragment {
     static let compact = Stringifier(stringify: compactInlineFragmentStringify)
 }
@@ -385,6 +403,8 @@ private func compactGraphQLStringify(gql: GraphQL) throws -> String {
         return try Stringifier.normal.stringify(fs)
     case let .field(field):
         return try Stringifier.compact.stringify(field)
+    case let .fragmentDefinition(fdef):
+        return try Stringifier.compact.stringify(fdef)
     }
 }
 
@@ -416,6 +436,13 @@ private func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> St
 private func normalFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
     let name = try Stringifier.normal.stringify(frag.name)
     return "... \(name)"
+}
+
+private func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> String {
+    let name = try Stringifier.normal.stringify(frag.name)
+    let typeCondition = try Stringifier.normal.stringify(frag.typeCondition)
+    let selectionSet = try Stringifier.compact.stringify(frag.selectionSet)
+    return "fragment \(name) on \(typeCondition) \(selectionSet)"
 }
 
 private func compactOpStringify(op: GraphQL.Operation) throws -> String {
