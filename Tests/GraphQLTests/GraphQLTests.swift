@@ -32,6 +32,20 @@ class GraphQLNameTests: XCTestCase {
     }
 }
 
+class GraphQLFragmentNameTests: XCTestCase {
+    func testNameValid() throws {
+        XCTAssertEqual(GraphQL.FragmentName(check: "valid")?.value, "valid")
+    }
+
+    func testNameInvalidChars() throws {
+        XCTAssertNil(GraphQL.FragmentName(check: "🐶"))
+    }
+
+    func testNameOn() throws {
+        XCTAssertNil(GraphQL.FragmentName(check: "on"))
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])
