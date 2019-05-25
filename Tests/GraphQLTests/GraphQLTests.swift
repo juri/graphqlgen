@@ -10,7 +10,7 @@ private extension GraphQL.Selection {
     }
 }
 
-class GraphQLNameTests: XCTestCase {
+class NameTests: XCTestCase {
     func testNameEmpty() throws {
         XCTAssertNil(GraphQL.Name(check: ""))
     }
@@ -32,7 +32,7 @@ class GraphQLNameTests: XCTestCase {
     }
 }
 
-class GraphQLFragmentNameTests: XCTestCase {
+class FragmentNameTests: XCTestCase {
     func testNameValid() throws {
         XCTAssertEqual(GraphQL.FragmentName(check: "valid")?.value, "valid")
     }
