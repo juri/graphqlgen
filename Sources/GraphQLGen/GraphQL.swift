@@ -89,6 +89,8 @@ public indirect enum GraphQL {
 
     /// Fragment name.
     ///
+    /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
+    ///
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
     public typealias FragmentName = ValidatedName<FragmentNameValidator>
 
