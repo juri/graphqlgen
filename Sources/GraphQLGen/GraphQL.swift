@@ -37,6 +37,7 @@ public indirect enum GraphQL {
     public struct Operation {
         public let type: OperationType
         public let name: Name?
+        public let variableDefinitions: [VariableDefinition]
         public let selectionSet: SelectionSet
     }
 
@@ -118,6 +119,38 @@ public indirect enum GraphQL {
         public let selectionSet: SelectionSet
     }
 
+    /// A variable.
+    ///
+    /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
+    public struct Variable {
+        public let name: Name
+    }
+
+    /// A variable definition.
+    ///
+    /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
+    public struct VariableDefinition {
+        public let variable: Variable
+        public let type: TypeReference
+    }
+
+    /// A variable definition's type reference.
+    ///
+    /// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
+    public indirect enum TypeReference {
+        case named(Name)
+        case list([TypeReference])
+        case nonNull(NonNullTypeReference)
+    }
+
+    /// A non-null type reference.
+    ///
+    /// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
+    public enum NonNullTypeReference {
+        case named(Name)
+        case list([TypeReference])
+    }
+
     case operation(Operation)
     case inlineFragment(InlineFragment)
     case fragmentSpread(FragmentSpread)
@@ -190,11 +223,20 @@ extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
 
 extension GraphQL.Operation {
     public init(type: GraphQL.OperationType, selections: [GraphQL.Selection] = []) {
-        self.init(type: type, name: nil, selectionSet: .init(selections: selections))
+        self.init(type: type, name: nil, variableDefinitions: [], selectionSet: .init(selections: selections))
     }
 
-    public init?(type: GraphQL.OperationType, name: String, selections: [GraphQL.Selection] = []) {
-        self.init(type: type, name: GraphQL.Name(value: name), selectionSet: .init(selections: selections))
+    public init(
+        type: GraphQL.OperationType,
+        name: String? = nil,
+        variableDefinitions: [GraphQL.VariableDefinition] = [],
+        selections: [GraphQL.Selection] = [])
+    {
+        self.init(
+            type: type,
+            name: name.map(GraphQL.Name.init(value:)),
+            variableDefinitions: variableDefinitions,
+            selectionSet: .init(selections: selections))
     }
 }
 

@@ -53,6 +53,18 @@ public extension Stringifier where A == GraphQL.SelectionSet {
     static let compact = Stringifier(stringify: compactSelSetStringify)
 }
 
+public extension Stringifier where A == GraphQL.Variable {
+    static let normal = Stringifier(stringify: normalVariableStringify)
+}
+
+public extension Stringifier where A == GraphQL.TypeReference {
+    static let compact = Stringifier(stringify: compactTypeReferenceStringify(typeRef:))
+}
+
+public extension Stringifier where A == GraphQL.VariableDefinition {
+    static let compact = Stringifier(stringify: compactVariableDefinitionStringify(vdef:))
+}
+
 // MARK: -
 
 func normalStringStringify(_ s: String) -> String {
@@ -139,8 +151,11 @@ func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> Str
 
 func compactOpStringify(op: GraphQL.Operation) throws -> String {
     let name = try op.name.map { " " + (try Stringifier.normal.stringify($0)) } ?? ""
+    let vdefs = op.variableDefinitions.isEmpty
+        ? ""
+        : " (" + (try op.variableDefinitions.map(Stringifier.compact.stringify).joined(separator: " ")) + ")"
     let selections = try Stringifier.compact.stringify(op.selectionSet)
-    return #"\#(op.type.rawValue)\#(name) \#(selections)"#
+    return #"\#(op.type.rawValue)\#(name)\#(vdefs) \#(selections)"#
 }
 
 func compactInlineFragmentStringify(frag: GraphQL.InlineFragment) throws -> String {
@@ -167,3 +182,30 @@ func compactSelSetStringify(selSet: GraphQL.SelectionSet) throws -> String {
     return #"{ \#(joined) }"#
 }
 
+func normalVariableStringify(variable: GraphQL.Variable) throws -> String {
+    let varName = try Stringifier.normal.stringify(variable.name)
+    return "$\(varName)"
+}
+
+func compactTypeReferenceStringify(typeRef: GraphQL.TypeReference) throws -> String {
+    let strn = { (n: GraphQL.Name) in try Stringifier.normal.stringify(n) }
+    let strl = { (l: [GraphQL.TypeReference]) in
+        "[" + (try l.map(compactTypeReferenceStringify(typeRef:)).joined(separator: " ")) + "]"
+    }
+
+    switch typeRef {
+    case let .named(n): return try strn(n)
+    case let .list(l): return try strl(l)
+    case let .nonNull(nn):
+        switch nn {
+        case let .named(n): return try strn(n) + "!"
+        case let .list(l): return try strl(l) + "!"
+        }
+    }
+}
+
+func compactVariableDefinitionStringify(vdef: GraphQL.VariableDefinition) throws -> String {
+    let name = try Stringifier.normal.stringify(vdef.variable)
+    let type = try Stringifier.compact.stringify(vdef.type)
+    return "\(name): \(type)"
+}

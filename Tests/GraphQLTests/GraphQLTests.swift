@@ -76,6 +76,23 @@ class FragmentDefinitionTests: XCTestCase {
     }
 }
 
+class VariableDefinitionTests: XCTestCase {
+    func testQueryWithVariableDefinitions() throws {
+        let vdefs = [
+            GraphQL.VariableDefinition(variable: .init(name: "var1"), type: .named("vtype1")),
+            GraphQL.VariableDefinition(
+                variable: .init(name: "var2"),
+                type: .list([.named("vtype2_1"), .named("vtype2_2")])),
+            GraphQL.VariableDefinition(variable: .init(name: "var3"), type: .nonNull(.named("vtype3")))
+        ]
+        let gql = GraphQL(
+            GraphQL.Operation(type: .query, variableDefinitions: vdefs, selections: [.field(.init(name: "sel1"))]))
+        XCTAssertEqual(
+            try gql.compactString(),
+            "query ($var1: vtype1 $var2: [vtype2_1 vtype2_2] $var3: vtype3!) { sel1 }")
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])
