@@ -260,7 +260,7 @@ public struct FragmentNameValidator: Validator {
 }
 
 
-private func stringifyArgument(value: Any) throws -> String {
+func stringifyArgument(value: Any) throws -> String {
     switch value {
     case let s as String:
         return normalStringStringify(s)
@@ -284,7 +284,7 @@ private func stringifyArgument(value: Any) throws -> String {
     }
 }
 
-private func stringifyArgument(name: GraphQL.Name, value: Any) throws -> String {
+func stringifyArgument(name: GraphQL.Name, value: Any) throws -> String {
     let vstr = try stringifyArgument(value: value)
     let nstr = try normalNameStringify(name)
     return "\(nstr): \(vstr)"
@@ -306,182 +306,12 @@ extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
     }
 }
 
-// MARK: - Stringification
-
-/// `Stringifier` is a protocol witness for stringifying a `GraphQL`.
-/// There are implementations for the various structures as static properties
-/// in the appropriately typed extensions.
-public struct Stringifier<A> {
-    public var stringify: (A) throws -> String
-}
-
-public extension Stringifier where A == String {
-    static let normal = Stringifier(stringify: normalStringStringify)
-}
-
-public extension Stringifier where A == GraphQL {
-    static let compact = Stringifier(stringify: compactGraphQLStringify)
-}
-
-public extension Stringifier where A == GraphQL.Name {
-    static let normal = Stringifier(stringify: normalNameStringify)
-}
-
-public extension Stringifier where A == GraphQL.Arguments {
-    static let compact = Stringifier(stringify: compactArgsStringify)
-}
-
-public extension Stringifier where A == GraphQL.Field {
-    static let compact = Stringifier(stringify: compactFieldStringify)
-}
-
-public extension Stringifier where A == GraphQL.FragmentName {
-    static let normal = Stringifier(stringify: normalFragmentNameStringify)
-}
-
-public extension Stringifier where A == GraphQL.FragmentSpread {
-    static let normal = Stringifier(stringify: normalFragmentSpreadStringify)
-}
-
-public extension Stringifier where A == GraphQL.FragmentDefinition {
-    static let compact = Stringifier(stringify: compactFragmentDefStringify)
-}
-
-public extension Stringifier where A == GraphQL.InlineFragment {
-    static let compact = Stringifier(stringify: compactInlineFragmentStringify)
-}
-
-public extension Stringifier where A == GraphQL.Operation {
-    static let compact = Stringifier(stringify: compactOpStringify)
-}
-
-public extension Stringifier where A == GraphQL.Selection {
-    static let compact = Stringifier(stringify: compactSelectionStringify)
-}
-
-public extension Stringifier where A == GraphQL.SelectionSet {
-    static let compact = Stringifier(stringify: compactSelSetStringify)
-}
-
-// MARK: -
-
-private func normalStringStringify(_ s: String) -> String {
-    return #""\#(GraphQL.escape(s))""#
-}
-
-private func normalIntStringify(_ i: Int) -> String {
-    return "\(i)"
-}
-
-private func normalFloatStringify(_ f: Float) -> String {
-    return "\(f)"
-}
-
-private func normalDoubleStringify(_ d: Double) -> String {
-    return "\(d)"
-}
-
-private func normalBoolStringify(_ b: Bool) -> String {
-    return "\(b)"
-}
-
-private func compactDictStringify(_ d: [String: Any]) throws -> String {
-    let encodedPairs = try d.map(GraphQL.encodePair(key:value:))
-    return #"{\#(encodedPairs.joined(separator: " "))}"#
-}
-
-private func compactArrayStringify(_ a: [Any]) throws -> String {
-    let encodedValues = try a.map(stringifyArgument(value:))
-    return #"[\#(encodedValues.joined(separator: " "))]"#
-}
-
-private func compactGraphQLStringify(gql: GraphQL) throws -> String {
-    switch gql {
-    case let .operation(op):
-        return try Stringifier.compact.stringify(op)
-    case let .inlineFragment(inlineFragment):
-        return try Stringifier.compact.stringify(inlineFragment)
-    case let .fragmentSpread(fs):
-        return try Stringifier.normal.stringify(fs)
-    case let .field(field):
-        return try Stringifier.compact.stringify(field)
-    case let .fragmentDefinition(fdef):
-        return try Stringifier.compact.stringify(fdef)
-    }
-}
-
-private func normalNameStringify(_ n: GraphQL.Name) throws -> String {
-    guard validateName(n.value) else { throw GraphQL.Name.BadValue(value: n.value) }
-    return n.value
-}
-
-private func compactArgsStringify(a: GraphQL.Arguments) throws -> String {
-    let args = try a.args.map(stringifyArgument(name:value:))
-    return args.joined(separator: " ")
-}
-
-private func compactFieldStringify(field: GraphQL.Field) throws -> String {
-    let args = try Stringifier.compact.stringify(field.arguments)
-    let name = try Stringifier.normal.stringify(field.name)
-    let aliasPrefix = try field.alias.map { (try Stringifier.normal.stringify($0) + ": ") } ?? ""
-    let selections = field.selectionSet.selections.isEmpty
-        ? ""
-        : " " + (try Stringifier.compact.stringify(field.selectionSet))
-    return #"\#(aliasPrefix)\#(name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
-}
-
-private func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
-    guard validateFragmentName(n.value) else { throw GraphQL.FragmentName.BadValue(value: n.value) }
-    return n.value
-}
-
-private func normalFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
-    let name = try Stringifier.normal.stringify(frag.name)
-    return "... \(name)"
-}
-
-private func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> String {
-    let name = try Stringifier.normal.stringify(frag.name)
-    let typeCondition = try Stringifier.normal.stringify(frag.typeCondition)
-    let selectionSet = try Stringifier.compact.stringify(frag.selectionSet)
-    return "fragment \(name) on \(typeCondition) \(selectionSet)"
-}
-
-private func compactOpStringify(op: GraphQL.Operation) throws -> String {
-    let name = try op.name.map { " " + (try Stringifier.normal.stringify($0)) } ?? ""
-    let selections = try Stringifier.compact.stringify(op.selectionSet)
-    return #"\#(op.type.rawValue)\#(name) \#(selections)"#
-}
-
-private func compactInlineFragmentStringify(frag: GraphQL.InlineFragment) throws -> String {
-    let cstr = try Stringifier.compact.stringify(frag.selectionSet)
-    let typeCondition = frag.namedType.isEmpty ? "" : "... on \(frag.namedType) "
-    return "\(typeCondition)\(cstr)"
-}
-
-private func compactSelectionStringify(sel: GraphQL.Selection) throws -> String {
-    switch sel {
-    case let .field(field):
-        return try Stringifier.compact.stringify(field)
-    case let .fragmentSpread(fragmentSpread):
-        return try Stringifier.normal.stringify(fragmentSpread)
-    case let .inlineFragment(inlineFragment):
-        return try Stringifier.compact.stringify(inlineFragment)
-    }
-}
-
-private func compactSelSetStringify(selSet: GraphQL.SelectionSet) throws -> String {
-    let selections: [GraphQL.Selection] = selSet.selections
-    let stringifiedSelections: [String] = try selections.map { (s: GraphQL.Selection) throws -> String in try Stringifier.compact.stringify(s) }
-    let joined: String = stringifiedSelections.joined(separator: " ")
-    return #"{ \#(joined) }"#
-}
 
 private let nameHeadChars: Set<Character> = ["_", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 private let digits: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 private let nameRestChars = nameHeadChars.union(digits)
 
-private func validateName(_ value: String) -> Bool {
+func validateName(_ value: String) -> Bool {
     guard
         let first = value.first,
         nameHeadChars.contains(first),
@@ -490,6 +320,6 @@ private func validateName(_ value: String) -> Bool {
     return true
 }
 
-private func validateFragmentName(_ value: String) -> Bool {
+func validateFragmentName(_ value: String) -> Bool {
     return validateName(value) && value != "on"
 }
