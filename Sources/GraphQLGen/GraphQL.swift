@@ -105,9 +105,9 @@ public indirect enum GraphQL {
     ///
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
     public struct FragmentDefinition {
-        let name: FragmentName
-        let typeCondition: Name
-        let selectionSet: SelectionSet
+        public let name: FragmentName
+        public let typeCondition: Name
+        public let selectionSet: SelectionSet
     }
 
     /// An inline fragment.
