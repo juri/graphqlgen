@@ -93,6 +93,20 @@ class VariableDefinitionTests: XCTestCase {
     }
 }
 
+class VariableUsageTests: XCTestCase {
+    func testVariableAsArgumentValue() throws {
+        let gql = GraphQL.field(
+            .init(
+                name: "valid",
+                arguments: [
+                    "foo": "bar",
+                    "zap": GraphQL.Variable(name: "zonk"),
+                ],
+                selectionSet: []))
+        XCTAssertEqual(try gql.compactString(), #"valid(foo: "bar" zap: $zonk)"#)
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])

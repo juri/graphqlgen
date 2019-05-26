@@ -321,6 +321,8 @@ func stringifyArgument(value: Any) throws -> String {
     case let args as GraphQL.Arguments:
         let formatted = try compactArgsStringify(a: args)
         return "{\(formatted)}"
+    case let v as GraphQL.Variable:
+        return try normalVariableStringify(variable: v)
     default:
         throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
     }
