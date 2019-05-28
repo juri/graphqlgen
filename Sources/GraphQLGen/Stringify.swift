@@ -30,7 +30,7 @@ public extension Stringifier where A == GraphQL.FragmentName {
 }
 
 public extension Stringifier where A == GraphQL.FragmentSpread {
-    static let normal = Stringifier(stringify: normalFragmentSpreadStringify)
+    static let compact = Stringifier(stringify: compactFragmentSpreadStringify)
 }
 
 public extension Stringifier where A == GraphQL.FragmentDefinition {
@@ -108,7 +108,7 @@ func compactGraphQLStringify(gql: GraphQL) throws -> String {
     case let .inlineFragment(inlineFragment):
         return try Stringifier.compact.stringify(inlineFragment)
     case let .fragmentSpread(fs):
-        return try Stringifier.normal.stringify(fs)
+        return try Stringifier.compact.stringify(fs)
     case let .field(field):
         return try Stringifier.compact.stringify(field)
     case let .fragmentDefinition(fdef):
@@ -142,7 +142,7 @@ func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
     return n.value
 }
 
-func normalFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
+func compactFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
     let name = try Stringifier.normal.stringify(frag.name)
     return "... \(name)"
 }
@@ -176,7 +176,7 @@ func compactSelectionStringify(sel: GraphQL.Selection) throws -> String {
     case let .field(field):
         return try Stringifier.compact.stringify(field)
     case let .fragmentSpread(fragmentSpread):
-        return try Stringifier.normal.stringify(fragmentSpread)
+        return try Stringifier.compact.stringify(fragmentSpread)
     case let .inlineFragment(inlineFragment):
         return try Stringifier.compact.stringify(inlineFragment)
     }
