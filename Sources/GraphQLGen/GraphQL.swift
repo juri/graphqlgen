@@ -119,6 +119,16 @@ public indirect enum GraphQL {
         public let selectionSet: SelectionSet
     }
 
+    /// An input object value to embed in Arguments.
+    ///
+    /// You'll want to use this if you care about the ordering of the fields, but otherwise a
+    /// `Dictionary<GraphQL.Name, Any>` is probably easier.
+    ///
+    /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
+    public struct ObjectValue {
+        var fields: [(GraphQL.Name, Any)]
+    }
+
     /// A variable.
     ///
     /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
@@ -318,11 +328,10 @@ func stringifyArgument(value: Any) throws -> String {
         return try compactDictStringify(dict)
     case let arr as [Any]:
         return try compactArrayStringify(arr)
-    case let args as GraphQL.Arguments:
-        let formatted = try compactArgsStringify(a: args)
-        return "{\(formatted)}"
     case let v as GraphQL.Variable:
         return try normalVariableStringify(variable: v)
+    case let o as GraphQL.ObjectValue:
+        return try compactObjectValueStringify(objectValue: o)
     default:
         throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
     }

@@ -53,6 +53,10 @@ public extension Stringifier where A == GraphQL.SelectionSet {
     static let compact = Stringifier(stringify: compactSelSetStringify)
 }
 
+public extension Stringifier where A == GraphQL.ObjectValue {
+    static let compact = Stringifier(stringify: compactObjectValueStringify)
+}
+
 public extension Stringifier where A == GraphQL.Variable {
     static let normal = Stringifier(stringify: normalVariableStringify)
 }
@@ -180,6 +184,12 @@ func compactSelSetStringify(selSet: GraphQL.SelectionSet) throws -> String {
     let stringifiedSelections: [String] = try selections.map { (s: GraphQL.Selection) throws -> String in try Stringifier.compact.stringify(s) }
     let joined: String = stringifiedSelections.joined(separator: " ")
     return #"{ \#(joined) }"#
+}
+
+func compactObjectValueStringify(objectValue: GraphQL.ObjectValue) throws -> String {
+    guard !objectValue.fields.isEmpty else { return "{}" }
+    let fields = try objectValue.fields.map(stringifyArgument(name:value:))
+    return #"{\#(fields.joined(separator: " "))}"#
 }
 
 func normalVariableStringify(variable: GraphQL.Variable) throws -> String {

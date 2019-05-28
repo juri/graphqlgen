@@ -215,7 +215,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFieldDictValue() throws {
-        let gql = GraphQL.field(.init(name: "hasDict", arguments: ["d": GraphQL.Arguments([("zap", 4), ("hod", 2)])]))
+        let gql = GraphQL.field(.init(name: "hasDict", arguments: ["d": GraphQL.ObjectValue(fields: [("zap", 4), ("hod", 2)])]))
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"hasDict(d: {zap: 4 hod: 2})"#)
