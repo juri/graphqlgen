@@ -122,8 +122,9 @@ func normalNameStringify(_ n: GraphQL.Name) throws -> String {
 }
 
 func compactArgsStringify(a: GraphQL.Arguments) throws -> String {
+    guard !a.args.isEmpty else { return "" }
     let args = try a.args.map(stringifyArgument(name:value:))
-    return args.joined(separator: " ")
+    return #"(\#(args.joined(separator: " ")))"#
 }
 
 func compactFieldStringify(field: GraphQL.Field) throws -> String {
@@ -133,7 +134,7 @@ func compactFieldStringify(field: GraphQL.Field) throws -> String {
     let selections = field.selectionSet.selections.isEmpty
         ? ""
         : " " + (try Stringifier.compact.stringify(field.selectionSet))
-    return #"\#(aliasPrefix)\#(name)\#(args.isEmpty ? "" : "(\(args))")\#(selections)"#
+    return #"\#(aliasPrefix)\#(name)\#(args)\#(selections)"#
 }
 
 func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
