@@ -155,12 +155,14 @@ func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> Str
 }
 
 func compactOpStringify(op: GraphQL.Operation) throws -> String {
-    let name = try op.name.map { " " + (try Stringifier.normal.stringify($0)) } ?? ""
+    let name = try op.name.map(Stringifier.normal.stringify)
     let vdefs = op.variableDefinitions.isEmpty
-        ? ""
-        : " (" + (try op.variableDefinitions.map(Stringifier.compact.stringify).joined(separator: " ")) + ")"
+        ? nil
+        : "(" + (try op.variableDefinitions.map(Stringifier.compact.stringify).joined(separator: " ")) + ")"
     let selections = try Stringifier.compact.stringify(op.selectionSet)
-    return #"\#(op.type.rawValue)\#(name)\#(vdefs) \#(selections)"#
+    return [op.type.rawValue, name, vdefs, selections]
+        .compactMap { $0 }
+        .joined(separator: " ")
 }
 
 func compactInlineFragmentStringify(frag: GraphQL.InlineFragment) throws -> String {
