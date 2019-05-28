@@ -232,10 +232,6 @@ extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
 }
 
 extension GraphQL.Operation {
-    public init(type: GraphQL.OperationType, selections: [GraphQL.Selection] = []) {
-        self.init(type: type, name: nil, variableDefinitions: [], selectionSet: .init(selections: selections))
-    }
-
     public init(
         type: GraphQL.OperationType,
         name: String? = nil,
