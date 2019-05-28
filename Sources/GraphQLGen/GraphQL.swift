@@ -215,7 +215,7 @@ public indirect enum GraphQL {
     }
 
     /// Constructs a `GraphQL.Operation` with type `query`.
-    public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation? {
+    public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
         return GraphQL.Operation(type: .query, name: name, selections: selections)
     }
 
