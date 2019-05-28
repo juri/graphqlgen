@@ -235,7 +235,8 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFieldAlias() throws {
-        let gql = GraphQL.field(.init(alias: "grace", name: "f", arguments: ["foo": "zap"], selectionSet: []))
+        let gql = GraphQL.field(
+            .init(alias: "grace", name: "f", arguments: ["foo": "zap"], selectionSet: []))
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"grace: f(foo: "zap")"#)

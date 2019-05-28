@@ -264,7 +264,11 @@ extension GraphQL.Field {
         arguments: GraphQL.Arguments = .init(),
         selectionSet: GraphQL.SelectionSet = [])
     {
-        self.init(alias: nil, name: name, arguments: arguments, selectionSet: selectionSet)
+        self.init(
+            alias: nil,
+            name: name,
+            arguments: arguments,
+            selectionSet: selectionSet)
     }
 
     public init(
@@ -273,7 +277,11 @@ extension GraphQL.Field {
         arguments: GraphQL.Arguments = .init(),
         selections: [GraphQL.Selection] = [])
     {
-        self.init(alias: alias, name: name, arguments: arguments, selectionSet: .init(selections: selections))
+        self.init(
+            alias: alias,
+            name: name,
+            arguments: arguments,
+            selectionSet: .init(selections: selections))
     }
 
     public init(
