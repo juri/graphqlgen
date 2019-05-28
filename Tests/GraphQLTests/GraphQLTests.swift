@@ -107,6 +107,70 @@ class VariableUsageTests: XCTestCase {
     }
 }
 
+class DirectiveTests: XCTestCase {
+    func testValidNoArgs() throws {
+        let dir = GraphQL.Directive(name: "deprecated", arguments: [:])
+        XCTAssertEqual(try Stringifier.compact.stringify(dir), "@deprecated")
+    }
+
+    func testValidArgs() throws {
+        let dir = GraphQL.Directive(name: "deprecated", arguments: ["foo": "bar", "zap": "fnord"])
+        XCTAssertEqual(try Stringifier.compact.stringify(dir), #"@deprecated(foo: "bar" zap: "fnord")"#)
+    }
+
+    func testInvalidName() throws {
+        let dir = GraphQL.Directive(name: "depr!ecated", arguments: [:])
+        XCTAssertThrowsError(try Stringifier.compact.stringify(dir))
+    }
+
+    func testOperationWithDirectives() throws {
+        let gql = GraphQL(
+            GraphQL.Operation(
+                type: .query,
+                name: nil,
+                variableDefinitions: [],
+                directives: [
+                    .init(name: "dir1", arguments: [:]),
+                    .init(name: "dir2", arguments: ["foo": "bar"]),
+                ],
+                selections: [.field(.init(name: "message"))]))
+        XCTAssertEqual(try gql.compactString(), #"query @dir1 @dir2(foo: "bar") { message }"#)
+    }
+
+    func testFieldWithDirectives() throws {
+        let gql = GraphQL(
+            GraphQL.Operation(
+                type: .query,
+                name: nil,
+                variableDefinitions: [],
+                directives: [
+                    .init(name: "dir1", arguments: [:]),
+                    .init(name: "dir2", arguments: ["foo": "bar"]),
+                ],
+                selections: [
+                    .field(
+                        .init(
+                            name: "message",
+                            directives: [
+                                GraphQL.Directive(name: "dir3", arguments: ["zap": "bang", "pong": "flarp"]),
+                                GraphQL.Directive(name: "dir4", arguments: .init([])),
+                            ]))
+                ]))
+        XCTAssertEqual(
+            try gql.compactString(),
+            #"query @dir1 @dir2(foo: "bar") { message @dir3(zap: "bang" pong: "flarp") @dir4 }"#)
+    }
+
+    func testFragmentSpreadWithDirectives() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentSpread(
+                name: "spread", directives: [
+                    .init(name: "skip", arguments: ["if": GraphQL.Variable(name: "someTest")])
+                ]))
+        XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread @skip(if: $someTest)")
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let query = GraphQL.query([.f1, .f2])
@@ -129,7 +193,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFragmentSpreadInit() throws {
-        let gql = GraphQL(GraphQL.FragmentSpread(name: "spread"))
+        let gql = GraphQL(GraphQL.FragmentSpread(name: "spread", directives: []))
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread")
     }
 
@@ -236,7 +300,7 @@ class GraphQLTests: XCTestCase {
 
     func testFieldAlias() throws {
         let gql = GraphQL.field(
-            .init(alias: "grace", name: "f", arguments: ["foo": "zap"], selectionSet: []))
+            .init(alias: "grace", name: "f", arguments: ["foo": "zap"], directives: [], selectionSet: []))
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"grace: f(foo: "zap")"#)
@@ -248,12 +312,12 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInvalidFragmentName() throws {
-        let gql = GraphQL.fragmentSpread(.init(name: "?"))
+        let gql = GraphQL.fragmentSpread(.init(name: "?", directives: []))
         XCTAssertThrowsError(try gql.compactString())
     }
 
     func testInvalidFragmentNameOn() throws {
-        let gql = GraphQL.fragmentSpread(.init(name: "on"))
+        let gql = GraphQL.fragmentSpread(.init(name: "on", directives: []))
         XCTAssertThrowsError(try gql.compactString())
     }
 

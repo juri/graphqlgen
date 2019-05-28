@@ -69,6 +69,10 @@ public extension Stringifier where A == GraphQL.VariableDefinition {
     static let compact = Stringifier(stringify: compactVariableDefinitionStringify(vdef:))
 }
 
+public extension Stringifier where A == GraphQL.Directive {
+    static let compact = Stringifier(stringify: compactDirectiveStringify(directive:))
+}
+
 // MARK: -
 
 func normalStringStringify(_ s: String) -> String {
@@ -131,10 +135,13 @@ func compactFieldStringify(field: GraphQL.Field) throws -> String {
     let args = try Stringifier.compact.stringify(field.arguments)
     let name = try Stringifier.normal.stringify(field.name)
     let aliasPrefix = try field.alias.map { (try Stringifier.normal.stringify($0) + ": ") } ?? ""
+    let directives = field.directives.isEmpty
+        ? ""
+        : " " + (try field.directives.map(Stringifier.compact.stringify).joined(separator: " "))
     let selections = field.selectionSet.selections.isEmpty
         ? ""
         : " " + (try Stringifier.compact.stringify(field.selectionSet))
-    return #"\#(aliasPrefix)\#(name)\#(args)\#(selections)"#
+    return #"\#(aliasPrefix)\#(name)\#(args)\#(directives)\#(selections)"#
 }
 
 func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
@@ -144,7 +151,10 @@ func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
 
 func compactFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> String {
     let name = try Stringifier.normal.stringify(frag.name)
-    return "... \(name)"
+    let directives = frag.directives.isEmpty
+        ? ""
+        : " " + (try frag.directives.map(Stringifier.compact.stringify).joined(separator: " "))
+    return "... \(name)\(directives)"
 }
 
 func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> String {
@@ -159,8 +169,11 @@ func compactOpStringify(op: GraphQL.Operation) throws -> String {
     let vdefs = op.variableDefinitions.isEmpty
         ? nil
         : "(" + (try op.variableDefinitions.map(Stringifier.compact.stringify).joined(separator: " ")) + ")"
+    let directives = op.directives.isEmpty
+        ? nil
+        : try op.directives.map(Stringifier.compact.stringify).joined(separator: " ")
     let selections = try Stringifier.compact.stringify(op.selectionSet)
-    return [op.type.rawValue, name, vdefs, selections]
+    return [op.type.rawValue, name, vdefs, directives, selections]
         .compactMap { $0 }
         .joined(separator: " ")
 }
@@ -222,3 +235,10 @@ func compactVariableDefinitionStringify(vdef: GraphQL.VariableDefinition) throws
     let type = try Stringifier.compact.stringify(vdef.type)
     return "\(name): \(type)"
 }
+
+func compactDirectiveStringify(directive: GraphQL.Directive) throws -> String {
+    let name = try Stringifier.normal.stringify(directive.name)
+    let args = try Stringifier.compact.stringify(directive.arguments)
+    return "@\(name)\(args)"
+}
+

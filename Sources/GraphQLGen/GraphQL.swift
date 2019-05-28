@@ -38,6 +38,7 @@ public indirect enum GraphQL {
         public let type: OperationType
         public let name: Name?
         public let variableDefinitions: [VariableDefinition]
+        public let directives: [Directive]
         public let selectionSet: SelectionSet
     }
 
@@ -74,6 +75,7 @@ public indirect enum GraphQL {
         public let alias: Name?
         public let name: Name
         public let arguments: Arguments
+        public let directives: [Directive]
         public let selectionSet: SelectionSet
     }
 
@@ -100,6 +102,7 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
     public struct FragmentSpread {
         public let name: FragmentName
+        public let directives: [Directive]
     }
 
     /// A fragment definition.
@@ -159,6 +162,14 @@ public indirect enum GraphQL {
     public enum NonNullTypeReference {
         case named(Name)
         case list([TypeReference])
+    }
+
+    /// A directive.
+    ///
+    /// - SeeAlso: [2.12 Directives](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Directives)
+    public struct Directive {
+        public let name: Name
+        public let arguments: Arguments
     }
 
     case operation(Operation)
@@ -236,12 +247,14 @@ extension GraphQL.Operation {
         type: GraphQL.OperationType,
         name: String? = nil,
         variableDefinitions: [GraphQL.VariableDefinition] = [],
+        directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
     {
         self.init(
             type: type,
             name: name.map(GraphQL.Name.init(value:)),
             variableDefinitions: variableDefinitions,
+            directives: directives,
             selectionSet: .init(selections: selections))
     }
 }
@@ -262,12 +275,14 @@ extension GraphQL.Field {
     public init(
         name: GraphQL.Name,
         arguments: GraphQL.Arguments = .init(),
+        directives: [GraphQL.Directive] = [],
         selectionSet: GraphQL.SelectionSet = [])
     {
         self.init(
             alias: nil,
             name: name,
             arguments: arguments,
+            directives: directives,
             selectionSet: selectionSet)
     }
 
@@ -275,12 +290,14 @@ extension GraphQL.Field {
         alias: GraphQL.Name? = nil,
         name: GraphQL.Name,
         arguments: GraphQL.Arguments = .init(),
+        directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
     {
         self.init(
             alias: alias,
             name: name,
             arguments: arguments,
+            directives: directives,
             selectionSet: .init(selections: selections))
     }
 
@@ -288,12 +305,14 @@ extension GraphQL.Field {
         alias: String? = nil,
         name: String,
         arguments: GraphQL.Arguments = .init(),
+        directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
     {
         self.init(
             alias: alias.map(GraphQL.Name.init(value:)),
             name: GraphQL.Name(value: name),
             arguments: arguments,
+            directives: directives,
             selectionSet: .init(selections: selections))
     }
 }
@@ -359,7 +378,7 @@ extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
 
 extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        self.init(name: GraphQL.FragmentName(value: value))
+        self.init(name: GraphQL.FragmentName(value: value), directives: [])
     }
 }
 
