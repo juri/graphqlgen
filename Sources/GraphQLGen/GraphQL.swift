@@ -40,6 +40,20 @@ public indirect enum GraphQL {
         public let variableDefinitions: [VariableDefinition]
         public let directives: [Directive]
         public let selectionSet: SelectionSet
+
+        public init(
+            type: OperationType,
+            name: Name? = nil,
+            variableDefinitions: [VariableDefinition] = [],
+            directives: [Directive] = [],
+            selectionSet: SelectionSet)
+        {
+            self.type = type
+            self.name = name
+            self.variableDefinitions = variableDefinitions
+            self.directives = directives
+            self.selectionSet = selectionSet
+        }
     }
 
     /// The type of an `Operation`.
@@ -65,6 +79,12 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
     public struct SelectionSet {
         public let selections: [Selection]
+
+        public init(selections: [Selection]) {
+            self.selections = selections
+        }
+
+        public static let empty = SelectionSet(selections: [])
     }
 
     /// A field.
@@ -77,6 +97,20 @@ public indirect enum GraphQL {
         public let arguments: Arguments
         public let directives: [Directive]
         public let selectionSet: SelectionSet
+
+        public init(
+            alias: Name? = nil,
+            name: Name,
+            arguments: Arguments = .empty,
+            directives: [Directive] = [],
+            selectionSet: SelectionSet = .empty)
+        {
+            self.alias = alias
+            self.name = name
+            self.arguments = arguments
+            self.directives = directives
+            self.selectionSet = selectionSet
+        }
     }
 
     /// Arguments.
@@ -88,6 +122,8 @@ public indirect enum GraphQL {
         public init(_ args: [(Name, Any)]) {
             self.args = args
         }
+
+        public static let empty = Arguments([])
     }
 
     /// Fragment name.
@@ -103,6 +139,14 @@ public indirect enum GraphQL {
     public struct FragmentSpread {
         public let name: FragmentName
         public let directives: [Directive]
+
+        public init(
+            name: FragmentName,
+            directives: [Directive] = [])
+        {
+            self.name = name
+            self.directives = directives
+        }
     }
 
     /// A fragment definition.
@@ -133,6 +177,14 @@ public indirect enum GraphQL {
     public struct InlineFragment {
         public let namedType: String
         public let selectionSet: SelectionSet
+
+        public init(
+            namedType: String,
+            selectionSet: SelectionSet)
+        {
+            self.namedType = namedType
+            self.selectionSet = selectionSet
+        }
     }
 
     /// An input object value to embed in Arguments.
@@ -143,6 +195,10 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
     public struct ObjectValue {
         public let fields: [(GraphQL.Name, Any)]
+
+        public init(fields: [(GraphQL.Name, Any)]) {
+            self.fields = fields
+        }
     }
 
     /// A variable.
@@ -150,6 +206,10 @@ public indirect enum GraphQL {
     /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
     public struct Variable {
         public let name: Name
+
+        public init(name: Name) {
+            self.name = name
+        }
     }
 
     /// A variable definition.
@@ -158,6 +218,14 @@ public indirect enum GraphQL {
     public struct VariableDefinition {
         public let variable: Variable
         public let type: TypeReference
+
+        public init(
+            variable: Variable,
+            type: TypeReference)
+        {
+            self.variable = variable
+            self.type = type
+        }
     }
 
     /// A variable definition's type reference.
@@ -183,6 +251,14 @@ public indirect enum GraphQL {
     public struct Directive {
         public let name: Name
         public let arguments: Arguments
+
+        public init(
+            name: Name,
+            arguments: Arguments)
+        {
+            self.name = name
+            self.arguments = arguments
+        }
     }
 
     case operation(Operation)
@@ -240,7 +316,7 @@ public indirect enum GraphQL {
 
     /// Constructs a `GraphQL.Operation` with type `query`.
     public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
-        return GraphQL.Operation(type: .query, name: name, selections: selections)
+        return GraphQL.Operation(type: .query, name: GraphQL.Name(value: name), selections: selections)
     }
 
     /// Constructs a `GraphQL.Operation` with type `query`.
@@ -258,14 +334,14 @@ extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
 extension GraphQL.Operation {
     public init(
         type: GraphQL.OperationType,
-        name: String? = nil,
+        name: GraphQL.Name? = nil,
         variableDefinitions: [GraphQL.VariableDefinition] = [],
         directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
     {
         self.init(
             type: type,
-            name: name.map(GraphQL.Name.init(value:)),
+            name: name,
             variableDefinitions: variableDefinitions,
             directives: directives,
             selectionSet: .init(selections: selections))
