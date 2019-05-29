@@ -119,7 +119,7 @@ public indirect enum GraphQL {
     public struct Arguments {
         public let args: [(Name, Any)]
 
-        public init(_ args: [(Name, Any)]) {
+        public init(args: [(Name, Any)]) {
             self.args = args
         }
 
@@ -355,8 +355,24 @@ extension GraphQL.SelectionSet: ExpressibleByArrayLiteral {
 }
 
 extension GraphQL.SelectionSet {
+    public init(_ selections: [GraphQL.Selection]) {
+        self.init(selections: selections)
+    }
+
     public init(selectionNames: [String]) {
         self.init(selections: selectionNames.map { GraphQL.Selection.field(.init(name: $0)) })
+    }
+}
+
+extension GraphQL.ObjectValue {
+    public init(_ fields: [(GraphQL.Name, Any)]) {
+        self.init(fields: fields)
+    }
+}
+
+extension GraphQL.Variable {
+    public init(_ name: GraphQL.Name) {
+        self.init(name: name)
     }
 }
 
@@ -460,6 +476,10 @@ public struct GraphQLTypeError: Error {
 }
 
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
+    public init(_ args: [(GraphQL.Name, Any)]) {
+        self.init(args: args)
+    }
+
     public init(dictionaryLiteral elements: (String, Any)...) {
         self.init(elements.map { (GraphQL.Name(value: $0.0), $0.1) })
     }
