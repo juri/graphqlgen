@@ -111,7 +111,20 @@ public indirect enum GraphQL {
     public struct FragmentDefinition {
         public let name: FragmentName
         public let typeCondition: Name
+        public let directives: [Directive]
         public let selectionSet: SelectionSet
+
+        public init(
+            name: FragmentName,
+            typeCondition: Name,
+            directives: [Directive] = [],
+            selectionSet: SelectionSet)
+        {
+            self.name = name
+            self.typeCondition = typeCondition
+            self.directives = directives
+            self.selectionSet = selectionSet
+        }
     }
 
     /// An inline fragment.

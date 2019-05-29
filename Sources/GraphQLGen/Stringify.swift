@@ -160,8 +160,11 @@ func compactFragmentSpreadStringify(frag: GraphQL.FragmentSpread) throws -> Stri
 func compactFragmentDefStringify(frag: GraphQL.FragmentDefinition) throws -> String {
     let name = try Stringifier.normal.stringify(frag.name)
     let typeCondition = try Stringifier.normal.stringify(frag.typeCondition)
+    let directives = frag.directives.isEmpty
+        ? ""
+        : " " + (try frag.directives.map(Stringifier.compact.stringify).joined(separator: " "))
     let selectionSet = try Stringifier.compact.stringify(frag.selectionSet)
-    return "fragment \(name) on \(typeCondition) \(selectionSet)"
+    return "fragment \(name) on \(typeCondition)\(directives) \(selectionSet)"
 }
 
 func compactOpStringify(op: GraphQL.Operation) throws -> String {

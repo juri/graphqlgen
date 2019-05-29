@@ -169,6 +169,29 @@ class DirectiveTests: XCTestCase {
                 ]))
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread @skip(if: $someTest)")
     }
+
+    func testFragmentDefinitionWithDirectives() throws {
+        let gql = GraphQL(
+            GraphQL.FragmentDefinition(
+                name: "fdef",
+                typeCondition: "tcond",
+                directives: [
+                    .init(name: "dir1", arguments: [:]),
+                    .init(name: "dir2", arguments: ["foo": "bar"]),
+                ],
+                selectionSet: [
+                    .field(
+                        .init(
+                            name: "message",
+                            directives: [
+                                GraphQL.Directive(name: "dir3", arguments: ["zap": "bang", "pong": "flarp"]),
+                                GraphQL.Directive(name: "dir4", arguments: .init([])),
+                            ]))
+                ]))
+        XCTAssertEqual(
+            try gql.compactString(),
+            #"fragment fdef on tcond @dir1 @dir2(foo: "bar") { message @dir3(zap: "bang" pong: "flarp") @dir4 }"#)
+    }
 }
 
 class GraphQLTests: XCTestCase {
