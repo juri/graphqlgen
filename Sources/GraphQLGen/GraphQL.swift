@@ -142,7 +142,7 @@ public indirect enum GraphQL {
     ///
     /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
     public struct ObjectValue {
-        var fields: [(GraphQL.Name, Any)]
+        public let fields: [(GraphQL.Name, Any)]
     }
 
     /// A variable.
