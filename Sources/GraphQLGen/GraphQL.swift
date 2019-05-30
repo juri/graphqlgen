@@ -395,6 +395,21 @@ extension Field {
     }
 }
 
+extension FragmentDefinition {
+    public init(
+        name: FragmentName,
+        typeCondition: Name,
+        directives: [Directive] = [],
+        selections: [Selection])
+    {
+        self.init(
+            name: name,
+            typeCondition: typeCondition,
+            directives: directives,
+            selectionSet: .init(selections))
+    }
+}
+
 public protocol Validator {
     associatedtype Value
     static func validate(_ value: Value) -> Bool
