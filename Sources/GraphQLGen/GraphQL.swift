@@ -366,6 +366,31 @@ extension Operation {
     }
 }
 
+extension Selection: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self = .field(named: Name(value: value))
+    }
+}
+
+extension Selection {
+    public static func inlineFragment(
+        on type: Name,
+        directives: [Directive] = [],
+        selections: [Selection] = []) -> Selection
+    {
+        return .inlineFragment(.init(namedType: type, directives: directives, selections: selections))
+    }
+
+    public static func field(
+        named name: Name,
+        arguments: Arguments = .empty,
+        directives: [Directive] = [],
+        selections: [Selection] = []) -> Selection
+    {
+        return .field(.init(name: name, arguments: arguments, directives: directives, selections: selections))
+    }
+}
+
 extension SelectionSet: ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Selection...) {
         self.init(selections: elements)
