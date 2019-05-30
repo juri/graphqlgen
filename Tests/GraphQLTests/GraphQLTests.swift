@@ -95,14 +95,13 @@ class VariableDefinitionTests: XCTestCase {
 
 class VariableUsageTests: XCTestCase {
     func testVariableAsArgumentValue() throws {
-        let gql = GraphQL.field(
-            .init(
-                name: "valid",
-                arguments: [
-                    "foo": "bar",
-                    "zap": GraphQL.Variable(name: "zonk"),
-                ],
-                selectionSet: []))
+        let gql = GraphQL.Field(
+            name: "valid",
+            arguments: [
+                "foo": "bar",
+                "zap": GraphQL.Variable(name: "zonk"),
+            ],
+            selectionSet: [])
         XCTAssertEqual(try gql.compactString(), #"valid(foo: "bar" zap: $zonk)"#)
     }
 }
@@ -211,7 +210,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInlineFragmentInit() throws {
-        let gql = GraphQL(GraphQL.InlineFragment(namedType: "Foo", selectionSet: .init(selectionNames: ["bar", "zot"])))
+        let gql = GraphQL.InlineFragment(namedType: "Foo", selectionSet: .init(selectionNames: ["bar", "zot"]))
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "... on Foo { bar zot }")
     }
 
@@ -221,7 +220,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFieldInit() throws {
-        let gql = GraphQL(GraphQL.Field(name: "f1"))
+        let gql = GraphQL.Field(name: "f1")
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "f1")
     }
 
@@ -240,32 +239,29 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInlineFragment() throws {
-        let frag = GraphQL.inlineFragment(
-            .init(
-                namedType: "Commit",
-                selectionSet: .init(selections: [.field(.init(name: "message"))])))
+        let frag = GraphQL.InlineFragment(
+            namedType: "Commit",
+            selectionSet: .init(selections: [.field(.init(name: "message"))]))
         XCTAssertEqual(
             try Stringifier.compact.stringify(frag),
             #"... on Commit { message }"#)
     }
 
     func testInlineFragmentWithSelectionSetInField() throws {
-        let frag = GraphQL.inlineFragment(
-            .init(
-                namedType: "Commit",
-                selectionSet: .init(
-                    selections: [
-                        .field(
-                            .init(
-                                name: "history",
-                                arguments: ["first": 10],
-                                selectionSet: [
-                                    .field(.init(name: "message"))
-                                ]
-                            )
+        let frag = GraphQL.InlineFragment(
+            namedType: "Commit",
+            selectionSet: .init(
+                selections: [
+                    .field(
+                        .init(
+                            name: "history",
+                            arguments: ["first": 10],
+                            selectionSet: [
+                                .field(.init(name: "message"))
+                            ]
                         )
-                    ]
-                )
+                    )
+                ]
             )
         )
         XCTAssertEqual(
@@ -281,56 +277,56 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFieldStringValue() throws {
-        let gql = GraphQL.field(.init(name: "fname", arguments: ["foo": "bar"]))
+        let gql = GraphQL.Field(name: "fname", arguments: ["foo": "bar"])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"fname(foo: "bar")"#)
     }
 
     func testFieldIntValue() throws {
-        let gql = GraphQL.field(.init(name: "fname", arguments: ["foo": 42]))
+        let gql = GraphQL.Field(name: "fname", arguments: ["foo": 42])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"fname(foo: 42)"#)
     }
 
     func testFieldArrayValue() throws {
-        let gql = GraphQL.field(.init(name: "hasArray", arguments: ["arr": [1, 2, 3]]))
+        let gql = GraphQL.Field(name: "hasArray", arguments: ["arr": [1, 2, 3]])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"hasArray(arr: [1 2 3])"#)
     }
 
     func testFieldDictValue() throws {
-        let gql = GraphQL.field(.init(name: "hasDict", arguments: ["d": GraphQL.ObjectValue(fields: [("zap", 4), ("hod", 2)])]))
+        let gql = GraphQL.Field(name: "hasDict", arguments: ["d": GraphQL.ObjectValue(fields: [("zap", 4), ("hod", 2)])])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"hasDict(d: {zap: 4 hod: 2})"#)
     }
 
     func testFieldNestedArrayValue() throws {
-        let gql = GraphQL.field(.init(name: "nested", arguments: ["d": [1, "foo", [3, "bar"]]]))
+        let gql = GraphQL.Field(name: "nested", arguments: ["d": [1, "foo", [3, "bar"]]])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"nested(d: [1 "foo" [3 "bar"]])"#)
     }
 
     func testFieldNestedDictValue() throws {
-        let gql = GraphQL.field(.init(name: "nested", arguments: ["d": ["a": 1, "b": ["c": 3]]]))
+        let gql = GraphQL.Field(name: "nested", arguments: ["d": ["a": 1, "b": ["c": 3]]])
         let options = ["nested(d: {a: 1 b: {c: 3}})", "nested(d: {b: {c: 3} a: 1})"]
         XCTAssertTrue(options.contains(try Stringifier.compact.stringify(gql)))
     }
 
     func testFieldAlias() throws {
-        let gql = GraphQL.field(
-            .init(alias: "grace", name: "f", arguments: ["foo": "zap"], directives: [], selectionSet: []))
+        let gql = GraphQL.Field(
+            alias: "grace", name: "f", arguments: ["foo": "zap"], directives: [], selectionSet: [])
         XCTAssertEqual(
             try Stringifier.compact.stringify(gql),
             #"grace: f(foo: "zap")"#)
     }
 
     func testInvalidFieldName() throws {
-        let gql = GraphQL.field(.init(name: "!!!"))
+        let gql = GraphQL.Field(name: "!!!")
         XCTAssertThrowsError(try gql.compactString())
     }
 
@@ -345,7 +341,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInvalidArgumentName() throws {
-        let gql = GraphQL.field(.init(name: "valid", arguments: ["?": "invalid"], selectionSet: []))
+        let gql = GraphQL.Field(name: "valid", arguments: ["?": "invalid"], selectionSet: [])
         XCTAssertThrowsError(try gql.compactString())
     }
 }

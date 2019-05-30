@@ -12,14 +12,8 @@ public indirect enum GraphQL {
     /// A GraphQL operation.
     case operation(Operation)
 
-    /// A GraphQL inline fragment.
-    case inlineFragment(InlineFragment)
-
     /// A GraphQL fragment spread.
     case fragmentSpread(FragmentSpread)
-
-    /// A GraphQL field.
-    case field(Field)
 
     /// A GraphQL fragment definition.
     case fragmentDefinition(FragmentDefinition)
@@ -288,11 +282,6 @@ public indirect enum GraphQL {
         self = .operation(op)
     }
 
-    /// Initialize a `GraphQL` as an `GraphQL.inlineFragment` with the provided content.
-    public init(_ inlineFrag: InlineFragment) {
-        self = .inlineFragment(inlineFrag)
-    }
-
     /// Initialize a `GraphQL` as a `GraphQL.fragmentSpread` with the provided content.
     public init(_ fragmentSpread: FragmentSpread) {
         self = .fragmentSpread(fragmentSpread)
@@ -301,11 +290,6 @@ public indirect enum GraphQL {
     /// Initialize a `GraphQL` as a `GraphQL.fragmentDefinition` with the provided content.
     public init(_ fragmentDefinition: FragmentDefinition) {
         self = .fragmentDefinition(fragmentDefinition)
-    }
-
-    /// Initialize a `GraphQL` as a `GraphQL.field` with the provided content.
-    public init(_ field: Field) {
-        self = .field(field)
     }
 
     public static func escape(_ string: String) -> String {
