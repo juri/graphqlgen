@@ -245,3 +245,12 @@ func compactDirectiveStringify(directive: GraphQL.Directive) throws -> String {
     return "@\(name)\(args)"
 }
 
+/// Helper extensions
+
+extension GraphQL {
+    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
+    public func compactString() throws -> String {
+        return try Stringifier.compact.stringify(self)
+    }
+}
+

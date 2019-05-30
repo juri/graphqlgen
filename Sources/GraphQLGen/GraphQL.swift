@@ -308,11 +308,6 @@ public indirect enum GraphQL {
         self = .field(field)
     }
 
-    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
-    public func compactString() throws -> String {
-        return try Stringifier.compact.stringify(self)
-    }
-
     public static func escape(_ string: String) -> String {
         let output = string.flatMap { c -> String in
             switch c {
