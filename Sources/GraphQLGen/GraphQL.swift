@@ -12,9 +12,6 @@ public indirect enum GraphQL {
     /// A GraphQL operation.
     case operation(Operation)
 
-    /// A GraphQL fragment spread.
-    case fragmentSpread(FragmentSpread)
-
     /// A GraphQL fragment definition.
     case fragmentDefinition(FragmentDefinition)
 
@@ -280,11 +277,6 @@ public indirect enum GraphQL {
     /// Initialize a `GraphQL` as a `GraphQL.operation` with the provided content.
     public init(_ op: Operation) {
         self = .operation(op)
-    }
-
-    /// Initialize a `GraphQL` as a `GraphQL.fragmentSpread` with the provided content.
-    public init(_ fragmentSpread: FragmentSpread) {
-        self = .fragmentSpread(fragmentSpread)
     }
 
     /// Initialize a `GraphQL` as a `GraphQL.fragmentDefinition` with the provided content.

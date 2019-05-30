@@ -161,11 +161,10 @@ class DirectiveTests: XCTestCase {
     }
 
     func testFragmentSpreadWithDirectives() throws {
-        let gql = GraphQL(
-            GraphQL.FragmentSpread(
-                name: "spread", directives: [
-                    .init(name: "skip", arguments: ["if": GraphQL.Variable(name: "someTest")])
-                ]))
+        let gql = GraphQL.FragmentSpread(
+            name: "spread", directives: [
+                .init(name: "skip", arguments: ["if": GraphQL.Variable(name: "someTest")])
+            ])
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread @skip(if: $someTest)")
     }
 
@@ -215,7 +214,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFragmentSpreadInit() throws {
-        let gql = GraphQL(GraphQL.FragmentSpread(name: "spread", directives: []))
+        let gql = GraphQL.FragmentSpread(name: "spread", directives: [])
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "... spread")
     }
 
@@ -270,7 +269,7 @@ class GraphQLTests: XCTestCase {
     }
 
     func testFragmentSpread() throws {
-        let frag = GraphQL.fragmentSpread("frag")
+        let frag = GraphQL.FragmentSpread("frag")
         XCTAssertEqual(
             try Stringifier.compact.stringify(frag),
             #"... frag"#)
@@ -331,12 +330,12 @@ class GraphQLTests: XCTestCase {
     }
 
     func testInvalidFragmentName() throws {
-        let gql = GraphQL.fragmentSpread(.init(name: "?", directives: []))
+        let gql = GraphQL.FragmentSpread(name: "?", directives: [])
         XCTAssertThrowsError(try gql.compactString())
     }
 
     func testInvalidFragmentNameOn() throws {
-        let gql = GraphQL.fragmentSpread(.init(name: "on", directives: []))
+        let gql = GraphQL.FragmentSpread(name: "on", directives: [])
         XCTAssertThrowsError(try gql.compactString())
     }
 

@@ -109,8 +109,6 @@ func compactGraphQLStringify(gql: GraphQL) throws -> String {
     switch gql {
     case let .operation(op):
         return try Stringifier.compact.stringify(op)
-    case let .fragmentSpread(fs):
-        return try Stringifier.compact.stringify(fs)
     case let .fragmentDefinition(fdef):
         return try Stringifier.compact.stringify(fdef)
     }
@@ -251,6 +249,13 @@ extension GraphQL {
 }
 
 extension GraphQL.Field {
+    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
+    public func compactString() throws -> String {
+        return try Stringifier.compact.stringify(self)
+    }
+}
+
+extension GraphQL.FragmentSpread {
     /// Retuns a compact string representation using `Stringifier.compact(_:)`.
     public func compactString() throws -> String {
         return try Stringifier.compact.stringify(self)
