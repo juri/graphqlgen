@@ -1,79 +1,103 @@
-/// `Stringifier` is a protocol witness for stringifying a `GraphQL`.
+/// `Stringifier` is a protocol witness for stringifying GraphQL stuctures.
+///
 /// There are implementations for the various structures as static properties
-/// in the appropriately typed extensions.
+/// in the appropriately typed extensions. The naming logic is that things
+/// called `normal` output their subject in more or less the only reasonable way,
+/// whereas things called `compact` produce a compact representation where a
+/// more expanded, indented, multi-line version would also be a reasonable choice.
 public struct Stringifier<A> {
+    /// A closure that converts an `A` to a `String`.
     public var stringify: (A) throws -> String
 }
 
 public extension Stringifier where A == String {
+    /// `normal` is a `Stringifier` producing a GraphQL safe, escaped version
+    /// of the input string.
     static let normal = Stringifier(stringify: InputValueFormat.formatString(_:))
 }
 
 public extension Stringifier where A == Document {
+    /// `compact` produces a compact representation of the input `Document`.
     static let compact = Stringifier(stringify: compactDocumentStringify)
 }
 
 public extension Stringifier where A == ExecutableDefinition {
+    /// `compact` produces a compact representation of the input `ExecutableDefinition`.
     static let compact = Stringifier(stringify: compactExecutableDefinitionStringify)
 }
 
 public extension Stringifier where A == Name {
+    /// `normal` produces the value of the input `Name`.
     static let normal = Stringifier(stringify: normalNameStringify)
 }
 
 public extension Stringifier where A == Arguments {
+    /// `compact` produces a compact representation of the input `Arguments`.
     static let compact = Stringifier(stringify: compactArgsStringify)
 }
 
 public extension Stringifier where A == Field {
+    /// `compact` produces a compact representation of the input `Field`.
     static let compact = Stringifier(stringify: compactFieldStringify)
 }
 
 public extension Stringifier where A == FragmentName {
+    /// `normal` produces a stringified representation of the input `FragmentName`.
     static let normal = Stringifier(stringify: normalFragmentNameStringify)
 }
 
 public extension Stringifier where A == FragmentSpread {
+    /// `compact` produces a compact representation of the input `FragmentSpread`.
     static let compact = Stringifier(stringify: compactFragmentSpreadStringify)
 }
 
 public extension Stringifier where A == FragmentDefinition {
+    /// `compact` produces a compact representation of the input `FragmentDefinition`.
     static let compact = Stringifier(stringify: compactFragmentDefStringify)
 }
 
 public extension Stringifier where A == InlineFragment {
+    /// `compact` produces a compact representation of the input `InlineFragment`.
     static let compact = Stringifier(stringify: compactInlineFragmentStringify)
 }
 
 public extension Stringifier where A == Operation {
+    /// `compact` produces a compact representation of the input `Operation`.
     static let compact = Stringifier(stringify: compactOpStringify)
 }
 
 public extension Stringifier where A == Selection {
+    /// `compact` produces a compact representation of the input `Selection`.
     static let compact = Stringifier(stringify: compactSelectionStringify)
 }
 
 public extension Stringifier where A == SelectionSet {
+    /// `compact` produces a compact representation of the input `SelectionSet`.
     static let compact = Stringifier(stringify: compactSelSetStringify)
 }
 
 public extension Stringifier where A == ObjectValue {
+    /// `compact` produces a compact representation of the input `ObjectValue`.
     static let compact = Stringifier(stringify: compactObjectValueStringify)
 }
 
 public extension Stringifier where A == Variable {
+    /// `normal` produces a stringified representation of the input `Variable`.
     static let normal = Stringifier(stringify: normalVariableStringify)
 }
 
 public extension Stringifier where A == TypeReference {
+    /// `compact` produces a compact representation of the input `TypeReference`.
     static let compact = Stringifier(stringify: compactTypeReferenceStringify(typeRef:))
 }
 
 public extension Stringifier where A == VariableDefinition {
+    /// `compact` produces a compact representation of the input `VariableDefinition`.
     static let compact = Stringifier(stringify: compactVariableDefinitionStringify(vdef:))
 }
 
 public extension Stringifier where A == Directive {
+    /// `compact` produces a compact representation of the input `Directive`.
     static let compact = Stringifier(stringify: compactDirectiveStringify(directive:))
 }
 
