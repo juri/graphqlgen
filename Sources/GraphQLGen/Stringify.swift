@@ -105,6 +105,7 @@ public extension Stringifier where A == Directive {
 
 /// `InputValueFormat` namespaces some basic helper functions useful for formatting GraphQL.
 public enum InputValueFormat {
+    /// Escape a string so it's safe to embed in quotes in a GraphQL document.
     public static func escape(_ string: String) -> String {
         let output = string.flatMap { c -> String in
             switch c {
@@ -118,22 +119,27 @@ public enum InputValueFormat {
         return String(output)
     }
 
+    /// Format a string so it can be inserted into a GraphQL document.
     public static func formatString(_ s: String) -> String {
         return #""\#(escape(s))""#
     }
 
+    /// Format an int so it can be inserted into a GraphQL document.
     public static func formatInt(_ i: Int) -> String {
         return "\(i)"
     }
 
+    /// Format a float so it can be inserted into a GraphQL document.
     public static func formatFloat(_ f: Float) -> String {
         return "\(f)"
     }
 
+    /// Format a double so it can be inserted into a GraphQL document.
     public static func formatDouble(_ d: Double) -> String {
         return "\(d)"
     }
 
+    /// Format a bool so it can be inserted into a GraphQL document.
     public static func formatBool(_ b: Bool) -> String {
         return "\(b)"
     }
