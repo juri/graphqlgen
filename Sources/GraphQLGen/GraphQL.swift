@@ -309,11 +309,6 @@ public func escape(_ string: String) -> String {
     return String(output)
 }
 
-public func encodePair(key: String, value: Any) throws -> String {
-    let encodedValue = try stringifyArgument(value: value)
-    return "\(key): \(encodedValue)"
-}
-
 extension ValidatedName: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value: value)

@@ -95,6 +95,11 @@ func normalBoolStringify(_ b: Bool) -> String {
     return "\(b)"
 }
 
+func encodePair(key: String, value: Any) throws -> String {
+    let encodedValue = try stringifyArgument(value: value)
+    return "\(key): \(encodedValue)"
+}
+
 func compactDictStringify(_ d: [String: Any]) throws -> String {
     let encodedPairs = try d.map(encodePair(key:value:))
     return #"{\#(encodedPairs.joined(separator: " "))}"#
