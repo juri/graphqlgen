@@ -6,7 +6,7 @@ public struct Stringifier<A> {
 }
 
 public extension Stringifier where A == String {
-    static let normal = Stringifier(stringify: normalStringStringify)
+    static let normal = Stringifier(stringify: InputValueFormat.formatString(_:))
 }
 
 public extension Stringifier where A == ExecutableDefinition {
@@ -75,38 +75,84 @@ public extension Stringifier where A == Directive {
 
 // MARK: -
 
-func normalStringStringify(_ s: String) -> String {
-    return #""\#(escape(s))""#
+public enum InputValueFormat {
+    public static func escape(_ string: String) -> String {
+        let output = string.flatMap { c -> String in
+            switch c {
+            case "\\": return "\\\\"
+            case "\"": return "\\\""
+            case "\n": return "\\n"
+            case "\r": return "\\r"
+            default: return "\(c)"
+            }
+        }
+        return String(output)
+    }
+
+    public static func formatString(_ s: String) -> String {
+        return #""\#(escape(s))""#
+    }
+
+    public static func formatInt(_ i: Int) -> String {
+        return "\(i)"
+    }
+
+    public static func formatFloat(_ f: Float) -> String {
+        return "\(f)"
+    }
+
+    public static func formatDouble(_ d: Double) -> String {
+        return "\(d)"
+    }
+
+    public static func formatBool(_ b: Bool) -> String {
+        return "\(b)"
+    }
+
+    public static func encodePair(key: String, value: Any) throws -> String {
+        let encodedValue = try compactFormat(value: value)
+        return "\(key): \(encodedValue)"
+    }
 }
 
-func normalIntStringify(_ i: Int) -> String {
-    return "\(i)"
+func compactFormat(value: Any) throws -> String {
+    switch value {
+    case let s as String:
+        return InputValueFormat.formatString(s)
+    case let i as Int:
+        return InputValueFormat.formatInt(i)
+    case let f as Float:
+        return InputValueFormat.formatFloat(f)
+    case let d as Double:
+        return InputValueFormat.formatDouble(d)
+    case let b as Bool:
+        return InputValueFormat.formatBool(b)
+    case let dict as [String: Any]:
+        return try compactDictStringify(dict)
+    case let arr as [Any]:
+        return try compactArrayStringify(arr)
+    case let v as Variable:
+        return try normalVariableStringify(variable: v)
+    case let o as ObjectValue:
+        return try compactObjectValueStringify(objectValue: o)
+    default:
+        throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
+    }
 }
 
-func normalFloatStringify(_ f: Float) -> String {
-    return "\(f)"
-}
-
-func normalDoubleStringify(_ d: Double) -> String {
-    return "\(d)"
-}
-
-func normalBoolStringify(_ b: Bool) -> String {
-    return "\(b)"
-}
-
-func encodePair(key: String, value: Any) throws -> String {
-    let encodedValue = try stringifyArgument(value: value)
-    return "\(key): \(encodedValue)"
+func compactFormat(name: Name, value: Any) throws -> String {
+    let vstr = try compactFormat(value: value)
+    let nstr = try normalNameStringify(name)
+    return "\(nstr): \(vstr)"
 }
 
 func compactDictStringify(_ d: [String: Any]) throws -> String {
-    let encodedPairs = try d.map(encodePair(key:value:))
+    let encodedPairs = try d.map(InputValueFormat.encodePair(key:value:))
     return #"{\#(encodedPairs.joined(separator: " "))}"#
 }
 
 func compactArrayStringify(_ a: [Any]) throws -> String {
-    let encodedValues = try a.map(stringifyArgument(value:))
+    let encodedValues = try a.map(compactFormat(value:))
     return #"[\#(encodedValues.joined(separator: " "))]"#
 }
 
@@ -126,7 +172,7 @@ func normalNameStringify(_ n: Name) throws -> String {
 
 func compactArgsStringify(a: Arguments) throws -> String {
     guard !a.args.isEmpty else { return "" }
-    let args = try a.args.map(stringifyArgument(name:value:))
+    let args = try a.args.map(compactFormat(name:value:))
     return #"(\#(args.joined(separator: " ")))"#
 }
 
@@ -206,7 +252,7 @@ func compactSelSetStringify(selSet: SelectionSet) throws -> String {
 
 func compactObjectValueStringify(objectValue: ObjectValue) throws -> String {
     guard !objectValue.fields.isEmpty else { return "{}" }
-    let fields = try objectValue.fields.map(stringifyArgument(name:value:))
+    let fields = try objectValue.fields.map(compactFormat(name:value:))
     return #"{\#(fields.joined(separator: " "))}"#
 }
 

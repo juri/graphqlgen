@@ -296,19 +296,6 @@ public struct Directive {
     }
 }
 
-public func escape(_ string: String) -> String {
-    let output = string.flatMap { c -> String in
-        switch c {
-        case "\\": return "\\\\"
-        case "\"": return "\\\""
-        case "\n": return "\\n"
-        case "\r": return "\\r"
-        default: return "\(c)"
-        }
-    }
-    return String(output)
-}
-
 extension ValidatedName: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value: value)
@@ -423,37 +410,6 @@ public struct FragmentNameValidator: Validator {
     }
 }
 
-
-func stringifyArgument(value: Any) throws -> String {
-    switch value {
-    case let s as String:
-        return normalStringStringify(s)
-    case let i as Int:
-        return normalIntStringify(i)
-    case let f as Float:
-        return normalFloatStringify(f)
-    case let d as Double:
-        return normalDoubleStringify(d)
-    case let b as Bool:
-        return normalBoolStringify(b)
-    case let dict as [String: Any]:
-        return try compactDictStringify(dict)
-    case let arr as [Any]:
-        return try compactArrayStringify(arr)
-    case let v as Variable:
-        return try normalVariableStringify(variable: v)
-    case let o as ObjectValue:
-        return try compactObjectValueStringify(objectValue: o)
-    default:
-        throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
-    }
-}
-
-func stringifyArgument(name: Name, value: Any) throws -> String {
-    let vstr = try stringifyArgument(value: value)
-    let nstr = try normalNameStringify(name)
-    return "\(nstr): \(vstr)"
-}
 
 public struct GraphQLTypeError: Error {
     public let message: String
