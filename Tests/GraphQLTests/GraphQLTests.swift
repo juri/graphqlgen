@@ -48,28 +48,28 @@ class FragmentNameTests: XCTestCase {
 
 class FragmentDefinitionTests: XCTestCase {
     func testValid() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.FragmentDefinition(
                 name: "frag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
         XCTAssertEqual(try gql.compactString(), "fragment frag on type { sel1 sel2 }")
     }
 
     func testInvalidName() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.FragmentDefinition(
                 name: "fr*ag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
         XCTAssertThrowsError(try gql.compactString())
     }
 
     func testInvalidTypeCondition() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.FragmentDefinition(
                 name: "frag", typeCondition: "ty+pe", selectionSet: .init(selectionNames: ["sel1", "sel2"])))
         XCTAssertThrowsError(try gql.compactString())
     }
 
     func testInvalidFieldNames() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.FragmentDefinition(
                 name: "frag", typeCondition: "type", selectionSet: .init(selectionNames: ["sel1", "se.l2"])))
         XCTAssertThrowsError(try gql.compactString())
@@ -85,7 +85,7 @@ class VariableDefinitionTests: XCTestCase {
                 type: .list([.named("vtype2_1"), .named("vtype2_2")])),
             GraphQL.VariableDefinition(variable: .init(name: "var3"), type: .nonNull(.named("vtype3")))
         ]
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.Operation(type: .query, variableDefinitions: vdefs, selections: [.field(.init(name: "sel1"))]))
         XCTAssertEqual(
             try gql.compactString(),
@@ -123,7 +123,7 @@ class DirectiveTests: XCTestCase {
     }
 
     func testOperationWithDirectives() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.Operation(
                 type: .query,
                 name: nil,
@@ -137,7 +137,7 @@ class DirectiveTests: XCTestCase {
     }
 
     func testFieldWithDirectives() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.Operation(
                 type: .query,
                 name: nil,
@@ -169,7 +169,7 @@ class DirectiveTests: XCTestCase {
     }
 
     func testFragmentDefinitionWithDirectives() throws {
-        let gql = GraphQL(
+        let gql = ExecutableDefinition(
             GraphQL.FragmentDefinition(
                 name: "fdef",
                 typeCondition: "tcond",
@@ -199,12 +199,12 @@ class GraphQLTests: XCTestCase {
     }
 
     func testCompactString() throws {
-        let gql = GraphQL.operation(GraphQL.query([.f1, .f2]))
+        let gql = ExecutableDefinition.operation(GraphQL.query([.f1, .f2]))
         XCTAssertEqual(try gql.compactString(), "query { f1 f2 }")
     }
 
     func testOperationInit() throws {
-        let gql = GraphQL(GraphQL.query([.f1, .f2]))
+        let gql = ExecutableDefinition(GraphQL.query([.f1, .f2]))
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "query { f1 f2 }")
     }
 

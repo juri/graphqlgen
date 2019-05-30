@@ -9,8 +9,8 @@ public extension Stringifier where A == String {
     static let normal = Stringifier(stringify: normalStringStringify)
 }
 
-public extension Stringifier where A == GraphQL {
-    static let compact = Stringifier(stringify: compactGraphQLStringify)
+public extension Stringifier where A == ExecutableDefinition {
+    static let compact = Stringifier(stringify: compactExecutableDefinitionStringify)
 }
 
 public extension Stringifier where A == GraphQL.Name {
@@ -105,7 +105,7 @@ func compactArrayStringify(_ a: [Any]) throws -> String {
     return #"[\#(encodedValues.joined(separator: " "))]"#
 }
 
-func compactGraphQLStringify(gql: GraphQL) throws -> String {
+func compactExecutableDefinitionStringify(gql: ExecutableDefinition) throws -> String {
     switch gql {
     case let .operation(op):
         return try Stringifier.compact.stringify(op)
@@ -241,7 +241,7 @@ func compactDirectiveStringify(directive: GraphQL.Directive) throws -> String {
 
 /// Helper extensions
 
-extension GraphQL {
+extension ExecutableDefinition {
     /// Retuns a compact string representation using `Stringifier.compact(_:)`.
     public func compactString() throws -> String {
         return try Stringifier.compact.stringify(self)

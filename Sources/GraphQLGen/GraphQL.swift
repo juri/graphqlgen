@@ -5,16 +5,29 @@
 //  Created by Juri Pakaste on 17/04/2019.
 //
 
-/// `GraphQL` represents an element in a GraphQL document.
+/// `ExecutableDefinition` represents an executable definition element in a GraphQL document.
 ///
-/// `GraphQL` is a nested enum where the payload of each case is represented by a nested struct.
-public indirect enum GraphQL {
+/// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
+public enum ExecutableDefinition {
     /// A GraphQL operation.
-    case operation(Operation)
+    case operation(GraphQL.Operation)
 
     /// A GraphQL fragment definition.
-    case fragmentDefinition(FragmentDefinition)
+    case fragmentDefinition(GraphQL.FragmentDefinition)
 
+    /// Initialize an `ExecutableDefinition` as an `ExecutableDefinition.operation` with the provided content.
+    public init(_ op: GraphQL.Operation) {
+        self = .operation(op)
+    }
+
+    /// Initialize an `ExecutableDefinition` as a `ExecutableDefinition.fragmentDefinition`
+    /// with the provided content.
+    public init(_ fragmentDefinition: GraphQL.FragmentDefinition) {
+        self = .fragmentDefinition(fragmentDefinition)
+    }
+}
+
+public enum GraphQL {
     /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
     ///
     /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
@@ -272,16 +285,6 @@ public indirect enum GraphQL {
             self.name = name
             self.arguments = arguments
         }
-    }
-
-    /// Initialize a `GraphQL` as a `GraphQL.operation` with the provided content.
-    public init(_ op: Operation) {
-        self = .operation(op)
-    }
-
-    /// Initialize a `GraphQL` as a `GraphQL.fragmentDefinition` with the provided content.
-    public init(_ fragmentDefinition: FragmentDefinition) {
-        self = .fragmentDefinition(fragmentDefinition)
     }
 
     public static func escape(_ string: String) -> String {
