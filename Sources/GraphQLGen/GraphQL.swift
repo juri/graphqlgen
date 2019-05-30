@@ -422,6 +422,19 @@ extension FragmentDefinition {
             directives: directives,
             selectionSet: .init(selections))
     }
+
+    public init(
+        name: FragmentName,
+        typeCondition: Name,
+        directives: [Directive] = [],
+        selections: [Name])
+    {
+        self.init(
+            name: name,
+            typeCondition: typeCondition,
+            directives: directives,
+            selectionSet: .init(selections.map { Selection.field(Field(name: $0)) }))
+    }
 }
 
 public protocol Validator {
