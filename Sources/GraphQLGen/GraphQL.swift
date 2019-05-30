@@ -59,13 +59,6 @@ public struct ValidatedName<V: Validator> where V.Value == String {
     }
 }
 
-/// Fragment name.
-///
-/// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
-///
-/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
-public typealias FragmentName = ValidatedName<FragmentNameValidator>
-
 /// An operation.
 ///
 /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
@@ -160,6 +153,13 @@ public struct Arguments {
 
     public static let empty = Arguments([])
 }
+
+/// Fragment name.
+///
+/// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
+///
+/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+public typealias FragmentName = ValidatedName<FragmentNameValidator>
 
 /// A fragment spread.
 ///
