@@ -75,6 +75,7 @@ public extension Stringifier where A == Directive {
 
 // MARK: -
 
+/// `InputValueFormat` namespaces some basic helper functions useful for formatting GraphQL.
 public enum InputValueFormat {
     public static func escape(_ string: String) -> String {
         let output = string.flatMap { c -> String in
