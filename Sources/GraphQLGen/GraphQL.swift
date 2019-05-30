@@ -220,14 +220,17 @@ public struct FragmentDefinition {
 /// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
 public struct InlineFragment {
     public let namedType: Name?
+    public let directives: [Directive]
     public let selectionSet: SelectionSet
 
     /// Initialize a new `InlineFragment`.
     public init(
         namedType: Name?,
+        directives: [Directive] = [],
         selectionSet: SelectionSet)
     {
         self.namedType = namedType
+        self.directives = directives
         self.selectionSet = selectionSet
     }
 }
@@ -376,6 +379,18 @@ extension SelectionSet {
 
     public init(selectionNames: [String]) {
         self.init(selections: selectionNames.map { Selection.field(.init(name: $0)) })
+    }
+}
+
+extension InlineFragment {
+    public init(
+        namedType: Name?,
+        directives: [Directive] = [],
+        selections: [Selection] = [])
+    {
+        self.namedType = namedType
+        self.directives = directives
+        self.selectionSet = .init(selections)
     }
 }
 

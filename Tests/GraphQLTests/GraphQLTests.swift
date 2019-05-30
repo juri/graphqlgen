@@ -190,6 +190,26 @@ class DirectiveTests: XCTestCase {
             try gql.compactString(),
             #"fragment fdef on tcond @dir1 @dir2(foo: "bar") { message @dir3(zap: "bang" pong: "flarp") @dir4 }"#)
     }
+
+    func testInlineFragmentWithDirectives() throws {
+        let frag = InlineFragment(
+            namedType: "Zap",
+            directives: [.init(name: "include", arguments: ["if": Variable(name: "expandedInfo")])],
+            selections: [.field(.init(name: "firstName"))])
+        XCTAssertEqual(
+            try Stringifier.compact.stringify(frag),
+            #"... on Zap @include(if: $expandedInfo) { firstName }"#)
+    }
+
+    func testInlineFragmentWithDirectivesWithoutName() throws {
+        let frag = InlineFragment(
+            namedType: nil,
+            directives: [.init(name: "include", arguments: ["if": Variable(name: "expandedInfo")])],
+            selections: [.field(.init(name: "firstName"))])
+        XCTAssertEqual(
+            try Stringifier.compact.stringify(frag),
+            #"... @include(if: $expandedInfo) { firstName }"#)
+    }
 }
 
 class DocumentTests: XCTestCase {
