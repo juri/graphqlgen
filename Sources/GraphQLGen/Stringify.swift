@@ -108,11 +108,6 @@ public enum InputValueFormat {
     public static func formatBool(_ b: Bool) -> String {
         return "\(b)"
     }
-
-    public static func encodePair(key: String, value: Any) throws -> String {
-        let encodedValue = try compactFormat(value: value)
-        return "\(key): \(encodedValue)"
-    }
 }
 
 func compactFormat(value: Any) throws -> String {
@@ -147,7 +142,7 @@ func compactFormat(name: Name, value: Any) throws -> String {
 }
 
 func compactDictStringify(_ d: [String: Any]) throws -> String {
-    let encodedPairs = try d.map(InputValueFormat.encodePair(key:value:))
+    let encodedPairs = try d.map { try compactFormat(name: Name(value: $0.key), value: $0.value) }
     return #"{\#(encodedPairs.joined(separator: " "))}"#
 }
 
