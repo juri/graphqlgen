@@ -43,7 +43,7 @@ public extension Stringifier where A == Field {
 
 public extension Stringifier where A == FragmentName {
     /// `normal` produces a stringified representation of the input `FragmentName`.
-    static let normal = Stringifier(stringify: normalFragmentNameStringify)
+    static let normal = Stringifier(stringify: normalNameStringify)
 }
 
 public extension Stringifier where A == FragmentSpread {
@@ -199,9 +199,8 @@ func compactExecutableDefinitionStringify(gql: ExecutableDefinition) throws -> S
     }
 }
 
-func normalNameStringify(_ n: Name) throws -> String {
-    guard validateName(n.value) else { throw Name.BadValue(value: n.value) }
-    return n.value
+func normalNameStringify<T>(_ n: ValidatedName<T>) throws -> String {
+    return try n.validateValue()
 }
 
 func compactArgsStringify(a: Arguments) throws -> String {
@@ -221,11 +220,6 @@ func compactFieldStringify(field: Field) throws -> String {
         ? ""
         : " " + (try Stringifier.compact.stringify(field.selectionSet))
     return #"\#(aliasPrefix)\#(name)\#(args)\#(directives)\#(selections)"#
-}
-
-func normalFragmentNameStringify(_ n: FragmentName) throws -> String {
-    guard validateFragmentName(n.value) else { throw FragmentName.BadValue(value: n.value) }
-    return n.value
 }
 
 func compactFragmentSpreadStringify(frag: FragmentSpread) throws -> String {

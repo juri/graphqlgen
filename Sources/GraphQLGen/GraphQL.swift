@@ -50,6 +50,11 @@ public struct ValidatedName<V: Validator> where V.Value == String {
     public init(value: String) {
         self.value = value
     }
+
+    public func validateValue() throws -> String {
+        guard V.validate(self.value) else { throw BadValue(value: self.value) }
+        return self.value
+    }
 }
 
 /// An operation.
