@@ -14,7 +14,7 @@
     <a title="ValidatedName Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">GraphQLGen Docs</a> (50% documented)</p>
+        <p><a href="../index.html">GraphQLGen Docs</a> (65% documented)</p>
         <p class="header-right"><a href="https://github.com/juri/graphqlgen"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -141,7 +141,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p><code>ValidatedName</code> is a name with pluggable validation logic.</p>
 
           </section>
           <section class="section task-group-section">
@@ -160,7 +160,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/ValidatedName.html">ValidatedName</a></code> throws <code>BadValue</code> when <code>validateValue</code> is called if <code><a href="../Structs/ValidatedName.html#/s:10GraphQLGen13ValidatedNameV5valueSSvp">value</a></code> is invalid.</p>
 
                         <a href="../Structs/ValidatedName/BadValue.html" class="slightly-smaller">See more</a>
                       </div>
@@ -188,7 +188,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The value of the name.</p>
 
                       </div>
                       <div class="declaration">
@@ -215,7 +215,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Validates the input string and if it&rsquo;s acceptable, initializes the <code>ValidatedName</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -242,7 +242,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Initializes the <code>ValidatedName</code> without validation.</p>
+
+<p>Stringifying a <code>ValidatedName</code> with an invalid value will throw an exception.</p>
 
                       </div>
                       <div class="declaration">
@@ -250,6 +252,33 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10GraphQLGen13ValidatedNameV13validateValueSSyKF"></a>
+                    <a name="//apple_ref/swift/Method/validateValue()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10GraphQLGen13ValidatedNameV13validateValueSSyKF">validateValue()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Return <code><a href="../Structs/ValidatedName.html#/s:10GraphQLGen13ValidatedNameV5valueSSvp">value</a></code> or throw <code><a href="../Structs/ValidatedName/BadValue.html">BadValue</a></code> if it&rsquo;s invalid.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">validateValue</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
