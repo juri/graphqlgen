@@ -245,6 +245,9 @@ public indirect enum GraphQL {
 
     /// A variable definition's type reference.
     ///
+    /// The type reference can be a single `Name`, a list of `TypeReference`s,
+    /// or a non-null version of those options, wrapped in a `NonNullTypeReference`.
+    ///
     /// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
     public indirect enum TypeReference {
         case named(Name)
@@ -254,6 +257,8 @@ public indirect enum GraphQL {
 
     /// A non-null type reference.
     ///
+    /// A non-null type reference can be either a single `Name` or a list of `TypeReference`s.
+    ///
     /// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
     public enum NonNullTypeReference {
         case named(Name)
@@ -261,6 +266,8 @@ public indirect enum GraphQL {
     }
 
     /// A directive.
+    ///
+    /// A directive has a name and arguments.
     ///
     /// - SeeAlso: [2.12 Directives](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Directives)
     public struct Directive {
@@ -276,26 +283,27 @@ public indirect enum GraphQL {
         }
     }
 
-    /// Initialize a `GraphQL` as an `operation` with the provided content.
+    /// Initialize a `GraphQL` as a `GraphQL.operation` with the provided content.
     public init(_ op: Operation) {
         self = .operation(op)
     }
 
-    /// Initialize a `GraphQL` as an `inlineFragment` with the provided content.
+    /// Initialize a `GraphQL` as an `GraphQL.inlineFragment` with the provided content.
     public init(_ inlineFrag: InlineFragment) {
         self = .inlineFragment(inlineFrag)
     }
 
-    /// Initialize a `GraphQL` as a `fragmentSpread` with the provided content.
+    /// Initialize a `GraphQL` as a `GraphQL.fragmentSpread` with the provided content.
     public init(_ fragmentSpread: FragmentSpread) {
         self = .fragmentSpread(fragmentSpread)
     }
 
+    /// Initialize a `GraphQL` as a `GraphQL.fragmentDefinition` with the provided content.
     public init(_ fragmentDefinition: FragmentDefinition) {
         self = .fragmentDefinition(fragmentDefinition)
     }
 
-    /// Initialize a `GraphQL` as a `field` with the provided content.
+    /// Initialize a `GraphQL` as a `GraphQL.field` with the provided content.
     public init(_ field: Field) {
         self = .field(field)
     }
