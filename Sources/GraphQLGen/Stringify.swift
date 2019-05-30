@@ -254,3 +254,9 @@ extension GraphQL {
     }
 }
 
+extension GraphQL.Field {
+    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
+    public func compactString() throws -> String {
+        return try Stringifier.compact.stringify(self)
+    }
+}
