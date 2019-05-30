@@ -9,6 +9,12 @@
 ///
 /// `GraphQL` is a nested enum where the payload of each case is represented by a nested struct.
 public indirect enum GraphQL {
+    case operation(Operation)
+    case inlineFragment(InlineFragment)
+    case fragmentSpread(FragmentSpread)
+    case field(Field)
+    case fragmentDefinition(FragmentDefinition)
+
     /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
     ///
     /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
@@ -260,12 +266,6 @@ public indirect enum GraphQL {
             self.arguments = arguments
         }
     }
-
-    case operation(Operation)
-    case inlineFragment(InlineFragment)
-    case fragmentSpread(FragmentSpread)
-    case field(Field)
-    case fragmentDefinition(FragmentDefinition)
 
     /// Initialize a `GraphQL` as an `operation` with the provided content.
     public init(_ op: Operation) {
