@@ -217,7 +217,7 @@ class DocumentTests: XCTestCase {
         let doc = Document(definitions: [
             .query([.field(.init(name: "f1"))]),
             .fragmentDefinition(
-                .init(name: "fdef", typeCondition: "TypeCond", selections: ["f2"])),
+                .init(name: "fdef", typeCondition: "TypeCond", selections: [.field(named: "f2")])),
         ])
         XCTAssertEqual(
             try doc.compactString(),
