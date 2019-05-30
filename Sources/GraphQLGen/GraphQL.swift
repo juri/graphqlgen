@@ -409,6 +409,22 @@ extension Field {
     }
 }
 
+extension Arguments: ExpressibleByDictionaryLiteral {
+    public init(_ args: [(Name, Any)]) {
+        self.init(args: args)
+    }
+
+    public init(dictionaryLiteral elements: (String, Any)...) {
+        self.init(elements.map { (Name(value: $0.0), $0.1) })
+    }
+}
+
+extension FragmentSpread: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(name: FragmentName(value: value), directives: [])
+    }
+}
+
 extension FragmentDefinition {
     public init(
         name: FragmentName,
@@ -458,23 +474,6 @@ public struct FragmentNameValidator: Validator {
 public struct GraphQLTypeError: Error {
     public let message: String
 }
-
-extension Arguments: ExpressibleByDictionaryLiteral {
-    public init(_ args: [(Name, Any)]) {
-        self.init(args: args)
-    }
-
-    public init(dictionaryLiteral elements: (String, Any)...) {
-        self.init(elements.map { (Name(value: $0.0), $0.1) })
-    }
-}
-
-extension FragmentSpread: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        self.init(name: FragmentName(value: value), directives: [])
-    }
-}
-
 
 private let nameHeadChars: Set<Character> = ["_", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 private let digits: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
