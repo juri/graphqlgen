@@ -12,8 +12,10 @@
 ///
 /// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
 public struct Document {
+    /// The executable definitions contained by this document.
     public let definitions: [ExecutableDefinition]
 
+    /// Initialize a new `Document`.
     public init(definitions: [ExecutableDefinition]) {
         self.definitions = definitions
     }
@@ -35,22 +37,31 @@ public enum ExecutableDefinition {
 /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
 public typealias Name = ValidatedName<NameValidator>
 
+/// `ValidatedName` is a name with pluggable validation logic.
 public struct ValidatedName<V: Validator> where V.Value == String {
+    /// `ValidatedName` throws `BadValue` when `validateValue` is called if `value` is invalid.
     public struct BadValue: Error {
+        /// The invalid value the name had.
         public let value: String
     }
 
+    /// The value of the name.
     public let value: String
 
+    /// Validates the input string and if it's acceptable, initializes the `ValidatedName`.
     public init?(check value: String) {
         guard V.validate(value) else { return nil }
         self.value = value
     }
 
+    /// Initializes the `ValidatedName` without validation.
+    ///
+    /// Stringifying a `ValidatedName` with an invalid value will throw an exception.
     public init(value: String) {
         self.value = value
     }
 
+    /// Return `value` or throw `BadValue` if it's invalid.
     public func validateValue() throws -> String {
         guard V.validate(self.value) else { throw BadValue(value: self.value) }
         return self.value
@@ -67,6 +78,7 @@ public struct Operation {
     public let directives: [Directive]
     public let selectionSet: SelectionSet
 
+    /// Initialize a new `Operation`.
     public init(
         type: OperationType,
         name: Name? = nil,
@@ -124,6 +136,7 @@ public struct Field {
     public let directives: [Directive]
     public let selectionSet: SelectionSet
 
+    /// Initialize a new `Field`.
     public init(
         alias: Name? = nil,
         name: Name,
@@ -143,12 +156,15 @@ public struct Field {
 ///
 /// - SeeAlso: [2.6 Arguments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Arguments)
 public struct Arguments {
+    /// The name-value pairs in this argument list.
     public let args: [(Name, Any)]
 
+    /// Initialize a new `Arguments`.
     public init(args: [(Name, Any)]) {
         self.args = args
     }
 
+    /// An empty `Arguments` instance.
     public static let empty = Arguments([])
 }
 
@@ -166,6 +182,7 @@ public struct FragmentSpread {
     public let name: FragmentName
     public let directives: [Directive]
 
+    /// Initialize a new `FragmentSpread`.
     public init(
         name: FragmentName,
         directives: [Directive] = [])
@@ -184,6 +201,7 @@ public struct FragmentDefinition {
     public let directives: [Directive]
     public let selectionSet: SelectionSet
 
+    /// Initialize a new `FragmentDefinition`.
     public init(
         name: FragmentName,
         typeCondition: Name,
@@ -204,6 +222,7 @@ public struct InlineFragment {
     public let namedType: String
     public let selectionSet: SelectionSet
 
+    /// Initialize a new `InlineFragment`.
     public init(
         namedType: String,
         selectionSet: SelectionSet)
@@ -222,6 +241,7 @@ public struct InlineFragment {
 public struct ObjectValue {
     public let fields: [(Name, Any)]
 
+    /// Initialize a new `ObjectValue`.
     public init(fields: [(Name, Any)]) {
         self.fields = fields
     }
@@ -233,6 +253,7 @@ public struct ObjectValue {
 public struct Variable {
     public let name: Name
 
+    /// Initialize a new `Variable`.
     public init(name: Name) {
         self.name = name
     }
@@ -245,6 +266,7 @@ public struct VariableDefinition {
     public let variable: Variable
     public let type: TypeReference
 
+    /// Initialize a new `VariableDefinition`.
     public init(
         variable: Variable,
         type: TypeReference)
@@ -285,6 +307,7 @@ public struct Directive {
     public let name: Name
     public let arguments: Arguments
 
+    /// Initialize a new `Directive`.
     public init(
         name: Name,
         arguments: Arguments)
