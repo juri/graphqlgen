@@ -256,8 +256,8 @@ func compactOpStringify(op: Operation) throws -> String {
 
 func compactInlineFragmentStringify(frag: InlineFragment) throws -> String {
     let cstr = try Stringifier.compact.stringify(frag.selectionSet)
-    let typeCondition = frag.namedType.isEmpty ? "" : "... on \(frag.namedType) "
-    return "\(typeCondition)\(cstr)"
+    let typeCondition = try frag.namedType.map { try "on \($0.validateValue()) " } ?? ""
+    return "... \(typeCondition)\(cstr)"
 }
 
 func compactSelectionStringify(sel: Selection) throws -> String {

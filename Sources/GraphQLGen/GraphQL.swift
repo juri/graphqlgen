@@ -219,12 +219,12 @@ public struct FragmentDefinition {
 ///
 /// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
 public struct InlineFragment {
-    public let namedType: String
+    public let namedType: Name?
     public let selectionSet: SelectionSet
 
     /// Initialize a new `InlineFragment`.
     public init(
-        namedType: String,
+        namedType: Name?,
         selectionSet: SelectionSet)
     {
         self.namedType = namedType
