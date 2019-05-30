@@ -9,6 +9,10 @@ public extension Stringifier where A == String {
     static let normal = Stringifier(stringify: InputValueFormat.formatString(_:))
 }
 
+public extension Stringifier where A == Document {
+    static let compact = Stringifier(stringify: compactDocumentStringify)
+}
+
 public extension Stringifier where A == ExecutableDefinition {
     static let compact = Stringifier(stringify: compactExecutableDefinitionStringify)
 }
@@ -152,6 +156,10 @@ func compactArrayStringify(_ a: [Any]) throws -> String {
     return #"[\#(encodedValues.joined(separator: " "))]"#
 }
 
+func compactDocumentStringify(doc: Document) throws -> String {
+    return try doc.definitions.map(Stringifier.compact.stringify).joined(separator: " ")
+}
+
 func compactExecutableDefinitionStringify(gql: ExecutableDefinition) throws -> String {
     switch gql {
     case let .operation(op):
@@ -287,6 +295,13 @@ func compactDirectiveStringify(directive: Directive) throws -> String {
 }
 
 /// Helper extensions
+
+extension Document {
+    /// Retuns a compact string representation using `Stringifier.compact(_:)`.
+    public func compactString() throws -> String {
+        return try Stringifier.compact.stringify(self)
+    }
+}
 
 extension ExecutableDefinition {
     /// Retuns a compact string representation using `Stringifier.compact(_:)`.

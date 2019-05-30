@@ -5,6 +5,20 @@
 //  Created by Juri Pakaste on 17/04/2019.
 //
 
+/// `Document` represents a GraphQL document.
+///
+/// GraphQLGen does not support type system definitions or extensions, so the only things
+/// a `Document` may contain are `ExecutableDefinition`s.
+///
+/// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
+public struct Document {
+    public let definitions: [ExecutableDefinition]
+
+    public init(definitions: [ExecutableDefinition]) {
+        self.definitions = definitions
+    }
+}
+
 /// `ExecutableDefinition` represents an executable definition element in a GraphQL document.
 ///
 /// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)

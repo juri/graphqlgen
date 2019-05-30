@@ -192,6 +192,19 @@ class DirectiveTests: XCTestCase {
     }
 }
 
+class DocumentTests: XCTestCase {
+    func testDocument() throws {
+        let doc = Document(definitions: [
+            .query([.field(.init(name: "f1"))]),
+            .fragmentDefinition(
+                .init(name: "fdef", typeCondition: "TypeCond", selections: [.field(.init(name: "f2"))])),
+        ])
+        XCTAssertEqual(
+            try doc.compactString(),
+            "query { f1 } fragment fdef on TypeCond { f2 }")
+    }
+}
+
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
         let q = ExecutableDefinition.query([.f1, .f2])
