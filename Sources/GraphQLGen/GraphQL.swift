@@ -14,27 +14,6 @@ public enum ExecutableDefinition {
 
     /// A GraphQL fragment definition.
     case fragmentDefinition(FragmentDefinition)
-
-    /// Initialize an `ExecutableDefinition` as an `ExecutableDefinition.operation` with the provided content.
-    public init(_ op: Operation) {
-        self = .operation(op)
-    }
-
-    /// Initialize an `ExecutableDefinition` as a `ExecutableDefinition.fragmentDefinition`
-    /// with the provided content.
-    public init(_ fragmentDefinition: FragmentDefinition) {
-        self = .fragmentDefinition(fragmentDefinition)
-    }
-
-    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
-    public static func query(_ name: String, _ selections: [Selection]) -> ExecutableDefinition {
-        return self.init(Operation(type: .query, name: Name(value: name), selections: selections))
-    }
-
-    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
-    public static func query(_ selections: [Selection]) -> ExecutableDefinition {
-        return self.init(Operation(type: .query, selections: selections))
-    }
 }
 
 /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
@@ -293,6 +272,29 @@ public struct Directive {
     {
         self.name = name
         self.arguments = arguments
+    }
+}
+
+extension ExecutableDefinition {
+    /// Initialize an `ExecutableDefinition` as an `ExecutableDefinition.operation` with the provided content.
+    public init(_ op: Operation) {
+        self = .operation(op)
+    }
+
+    /// Initialize an `ExecutableDefinition` as a `ExecutableDefinition.fragmentDefinition`
+    /// with the provided content.
+    public init(_ fragmentDefinition: FragmentDefinition) {
+        self = .fragmentDefinition(fragmentDefinition)
+    }
+
+    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
+    public static func query(_ name: String, _ selections: [Selection]) -> ExecutableDefinition {
+        return self.init(Operation(type: .query, name: Name(value: name), selections: selections))
+    }
+
+    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
+    public static func query(_ selections: [Selection]) -> ExecutableDefinition {
+        return self.init(Operation(type: .query, selections: selections))
     }
 }
 
