@@ -13,7 +13,7 @@
     <a title="GraphQLGen  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">GraphQLGen Docs</a> (39% documented)</p>
+        <p><a href="index.html">GraphQLGen Docs</a> (50% documented)</p>
         <p class="header-right"><a href="https://github.com/juri/graphqlgen"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -134,17 +134,20 @@
         <section>
           <section class="section">
             
-            <p><a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5.0-red.svg?style=flat" alt="Swift 5.0"></a>
+            <h1 id='graphqlgen' class='heading'>GraphQLGen</h1>
+
+<p><a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5.0-red.svg?style=flat" alt="Swift 5.0"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache%202-blue.svg" alt="License"></a>
 <a href="http://twitter.com/juripakaste"><img src="https://img.shields.io/badge/twitter-@juripakaste-brightgreen.svg" alt="Twitter"></a></p>
-<h1 id='graphqlgen' class='heading'>GraphQLGen</h1>
 
 <p>GraphQLGen is a Swift library for generating <a href="https://graphql.org">GraphQL</a> documents (i.e. things you can send to a server.) It follows the <a href="https://graphql.github.io/graphql-spec/June2018/">June 2018 spec</a>. It does not do networking, data binding, or parsing.</p>
 
 <p>It&rsquo;s a pure Swift library with no dependencies beyond the standard library, so it should be usable in any environment where you can use Swift.</p>
 <h2 id='usage' class='heading'>Usage</h2>
 
-<p>GraphQLGen implements a straightforward mapping from the types in GraphQL specs to Swift types. The types are the same you&rsquo;ll find in the spec: Operation, Field, Selection, SelectionSet, etc. This means that it should be easy enough if you know the format, but it can be verbose. You probably want to add some layers on top of it to facilitate the use of the API you need.</p>
+<p>For details about the API, see the <a href="https://github.com/juri/graphqlgen">source</a> or <a href="https://juri.github.io/graphqlgen/">docs</a>.</p>
+
+<p>GraphQLGen implements a straightforward mapping from the types in GraphQL specs to Swift types. The types are the same you&rsquo;ll find in the spec: Document, ExecutableDefinition, Operation, Field, Selection, SelectionSet, etc. This means that it should be easy enough if you know the format, but it can be verbose. You probably want to add some layers on top of it to facilitate the use of the API you need.</p>
 
 <p>Using the GraphQLGen types, you could write something like this:</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">GraphQLGen</span>

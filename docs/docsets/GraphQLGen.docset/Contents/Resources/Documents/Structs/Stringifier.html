@@ -14,7 +14,7 @@
     <a title="Stringifier Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">GraphQLGen Docs</a> (39% documented)</p>
+        <p><a href="../index.html">GraphQLGen Docs</a> (50% documented)</p>
         <p class="header-right"><a href="https://github.com/juri/graphqlgen"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -141,9 +141,13 @@
 
                 </div>
               </div>
-            <p><code>Stringifier</code> is a protocol witness for stringifying a <code>GraphQL</code>.
-There are implementations for the various structures as static properties
-in the appropriately typed extensions.</p>
+            <p><code>Stringifier</code> is a protocol witness for stringifying GraphQL stuctures.</p>
+
+<p>There are implementations for the various structures as static properties
+in the appropriately typed extensions. The naming logic is that things
+called <code>normal</code> output their subject in more or less the only reasonable way,
+whereas things called <code>compact</code> produce a compact representation where a
+more expanded, indented, multi-line version would also be a reasonable choice.</p>
 
           </section>
           <section class="section task-group-section">
@@ -162,7 +166,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A closure that converts an <code>A</code> to a <code>String</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -193,7 +197,8 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>normal</code> is a <code>Stringifier</code> producing a GraphQL safe, escaped version
+of the input string.</p>
 
                       </div>
                       <div class="declaration">
@@ -224,7 +229,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>compact</code> produces a compact representation of the input <code><a href="../Structs/Document.html">Document</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -255,7 +260,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Enums/ExecutableDefinition.html">ExecutableDefinition</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -286,7 +291,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVAASSRszlE6normalACySSGvpZ">normal</a></code> produces the value of the input <code><a href="../Typealiases.html#/s:10GraphQLGen4Namea">Name</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -317,7 +322,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/Arguments.html">Arguments</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -348,7 +353,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/Field.html">Field</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -379,7 +384,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVAASSRszlE6normalACySSGvpZ">normal</a></code> produces a stringified representation of the input <code><a href="../Typealiases.html#/s:10GraphQLGen12FragmentNamea">FragmentName</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -410,7 +415,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/FragmentSpread.html">FragmentSpread</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -441,7 +446,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/FragmentDefinition.html">FragmentDefinition</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -472,7 +477,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/InlineFragment.html">InlineFragment</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -503,7 +508,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/Operation.html">Operation</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -534,7 +539,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Enums/Selection.html">Selection</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -565,7 +570,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/SelectionSet.html">SelectionSet</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -596,7 +601,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/ObjectValue.html">ObjectValue</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -627,7 +632,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVAASSRszlE6normalACySSGvpZ">normal</a></code> produces a stringified representation of the input <code><a href="../Structs/Variable.html">Variable</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -658,7 +663,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Enums/TypeReference.html">TypeReference</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -689,7 +694,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/VariableDefinition.html">VariableDefinition</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -720,7 +725,7 @@ in the appropriately typed extensions.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code><a href="../Structs/Stringifier.html#/s:10GraphQLGen11StringifierVA2A8DocumentVRszlE7compactACyAEGvpZ">compact</a></code> produces a compact representation of the input <code><a href="../Structs/Directive.html">Directive</a></code>.</p>
 
                       </div>
                       <div class="declaration">
