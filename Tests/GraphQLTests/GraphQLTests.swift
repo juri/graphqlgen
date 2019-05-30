@@ -194,17 +194,17 @@ class DirectiveTests: XCTestCase {
 
 class GraphQLTests: XCTestCase {
     func testQuery() throws {
-        let q = query([.f1, .f2])
+        let q = ExecutableDefinition.query([.f1, .f2])
         XCTAssertEqual(try Stringifier.compact.stringify(q), "query { f1 f2 }")
     }
 
     func testCompactString() throws {
-        let gql = ExecutableDefinition.operation(query([.f1, .f2]))
+        let gql = ExecutableDefinition.query([.f1, .f2])
         XCTAssertEqual(try gql.compactString(), "query { f1 f2 }")
     }
 
     func testOperationInit() throws {
-        let gql = ExecutableDefinition(query([.f1, .f2]))
+        let gql = ExecutableDefinition.query([.f1, .f2])
         XCTAssertEqual(try Stringifier.compact.stringify(gql), "query { f1 f2 }")
     }
 
@@ -224,14 +224,14 @@ class GraphQLTests: XCTestCase {
     }
 
     func testRepository() throws {
-        let q = query([.repo(owner: "o", name: "n", [.f1])])
+        let q = ExecutableDefinition.query([.repo(owner: "o", name: "n", [.f1])])
         XCTAssertEqual(
             try Stringifier.compact.stringify(q),
             #"query { repository(owner: "o" name: "n") { f1 } }"#)
     }
 
     func testEscaping() throws {
-        let q = query([.repo(owner: "o\\hello", name: "n\"world", [.f1])])
+        let q = ExecutableDefinition.query([.repo(owner: "o\\hello", name: "n\"world", [.f1])])
         XCTAssertEqual(
             try Stringifier.compact.stringify(q),
             #"query { repository(owner: "o\\hello" name: "n\"world") { f1 } }"#)

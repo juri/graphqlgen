@@ -25,6 +25,16 @@ public enum ExecutableDefinition {
     public init(_ fragmentDefinition: FragmentDefinition) {
         self = .fragmentDefinition(fragmentDefinition)
     }
+
+    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
+    public static func query(_ name: String, _ selections: [Selection]) -> ExecutableDefinition {
+        return self.init(Operation(type: .query, name: Name(value: name), selections: selections))
+    }
+
+    /// Constructs an `ExecutableDefinition.operation` wrapping an `Operation.query`.
+    public static func query(_ selections: [Selection]) -> ExecutableDefinition {
+        return self.init(Operation(type: .query, selections: selections))
+    }
 }
 
 /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
@@ -302,16 +312,6 @@ public func escape(_ string: String) -> String {
 public func encodePair(key: String, value: Any) throws -> String {
     let encodedValue = try stringifyArgument(value: value)
     return "\(key): \(encodedValue)"
-}
-
-/// Constructs a ` with type `query`.
-public func query(_ name: String, _ selections: [Selection]) -> Operation {
-    return Operation(type: .query, name: Name(value: name), selections: selections)
-}
-
-/// Constructs a ` with type `query`.
-public func query(_ selections: [Selection]) -> Operation {
-    return .init(type: .query, selections: selections)
 }
 
 extension ValidatedName: ExpressibleByStringLiteral {
