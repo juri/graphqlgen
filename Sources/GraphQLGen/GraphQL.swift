@@ -27,29 +27,37 @@ public enum ExecutableDefinition {
     }
 }
 
-public enum GraphQL {
-    /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
-    ///
-    /// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
-    public typealias Name = ValidatedName<NameValidator>
+/// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
+///
+/// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
+public typealias Name = ValidatedName<NameValidator>
 
-    public struct ValidatedName<V: Validator> where V.Value == String {
-        public struct BadValue: Error {
-            public let value: String
-        }
-
+public struct ValidatedName<V: Validator> where V.Value == String {
+    public struct BadValue: Error {
         public let value: String
-
-        public init?(check value: String) {
-            guard V.validate(value) else { return nil }
-            self.value = value
-        }
-
-        public init(value: String) {
-            self.value = value
-        }
     }
 
+    public let value: String
+
+    public init?(check value: String) {
+        guard V.validate(value) else { return nil }
+        self.value = value
+    }
+
+    public init(value: String) {
+        self.value = value
+    }
+}
+
+/// Fragment name.
+///
+/// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
+///
+/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+public typealias FragmentName = ValidatedName<FragmentNameValidator>
+
+
+public enum GraphQL {
     /// An operation.
     ///
     /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
@@ -145,13 +153,6 @@ public enum GraphQL {
         public static let empty = Arguments([])
     }
 
-    /// Fragment name.
-    ///
-    /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
-    ///
-    /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
-    public typealias FragmentName = ValidatedName<FragmentNameValidator>
-
     /// A fragment spread.
     ///
     /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
@@ -209,13 +210,13 @@ public enum GraphQL {
     /// An input object value to embed in Arguments.
     ///
     /// You'll want to use this if you care about the ordering of the fields, but otherwise a
-    /// `Dictionary<GraphQL.Name, Any>` is probably easier.
+    /// `Dictionary< Any>` is probably easier.
     ///
     /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
     public struct ObjectValue {
-        public let fields: [(GraphQL.Name, Any)]
+        public let fields: [(Name, Any)]
 
-        public init(fields: [(GraphQL.Name, Any)]) {
+        public init(fields: [(Name, Any)]) {
             self.fields = fields
         }
     }
@@ -307,7 +308,7 @@ public enum GraphQL {
 
     /// Constructs a `GraphQL.Operation` with type `query`.
     public static func query(_ name: String, _ selections: [GraphQL.Selection]) -> GraphQL.Operation {
-        return GraphQL.Operation(type: .query, name: GraphQL.Name(value: name), selections: selections)
+        return GraphQL.Operation(type: .query, name: Name(value: name), selections: selections)
     }
 
     /// Constructs a `GraphQL.Operation` with type `query`.
@@ -316,7 +317,7 @@ public enum GraphQL {
     }
 }
 
-extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
+extension ValidatedName: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value: value)
     }
@@ -325,7 +326,7 @@ extension GraphQL.ValidatedName: ExpressibleByStringLiteral {
 extension GraphQL.Operation {
     public init(
         type: GraphQL.OperationType,
-        name: GraphQL.Name? = nil,
+        name: Name? = nil,
         variableDefinitions: [GraphQL.VariableDefinition] = [],
         directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
@@ -356,20 +357,20 @@ extension GraphQL.SelectionSet {
 }
 
 extension GraphQL.ObjectValue {
-    public init(_ fields: [(GraphQL.Name, Any)]) {
+    public init(_ fields: [(Name, Any)]) {
         self.init(fields: fields)
     }
 }
 
 extension GraphQL.Variable {
-    public init(_ name: GraphQL.Name) {
+    public init(_ name: Name) {
         self.init(name: name)
     }
 }
 
 extension GraphQL.Field {
     public init(
-        name: GraphQL.Name,
+        name: Name,
         arguments: GraphQL.Arguments = .init(),
         directives: [GraphQL.Directive] = [],
         selectionSet: GraphQL.SelectionSet = [])
@@ -383,8 +384,8 @@ extension GraphQL.Field {
     }
 
     public init(
-        alias: GraphQL.Name? = nil,
-        name: GraphQL.Name,
+        alias: Name? = nil,
+        name: Name,
         arguments: GraphQL.Arguments = .init(),
         directives: [GraphQL.Directive] = [],
         selections: [GraphQL.Selection] = [])
@@ -405,8 +406,8 @@ extension GraphQL.Field {
         selections: [GraphQL.Selection] = [])
     {
         self.init(
-            alias: alias.map(GraphQL.Name.init(value:)),
-            name: GraphQL.Name(value: name),
+            alias: alias.map(Name.init(value:)),
+            name: Name(value: name),
             arguments: arguments,
             directives: directives,
             selectionSet: .init(selections: selections))
@@ -456,7 +457,7 @@ func stringifyArgument(value: Any) throws -> String {
     }
 }
 
-func stringifyArgument(name: GraphQL.Name, value: Any) throws -> String {
+func stringifyArgument(name: Name, value: Any) throws -> String {
     let vstr = try stringifyArgument(value: value)
     let nstr = try normalNameStringify(name)
     return "\(nstr): \(vstr)"
@@ -467,18 +468,18 @@ public struct GraphQLTypeError: Error {
 }
 
 extension GraphQL.Arguments: ExpressibleByDictionaryLiteral {
-    public init(_ args: [(GraphQL.Name, Any)]) {
+    public init(_ args: [(Name, Any)]) {
         self.init(args: args)
     }
 
     public init(dictionaryLiteral elements: (String, Any)...) {
-        self.init(elements.map { (GraphQL.Name(value: $0.0), $0.1) })
+        self.init(elements.map { (Name(value: $0.0), $0.1) })
     }
 }
 
 extension GraphQL.FragmentSpread: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        self.init(name: GraphQL.FragmentName(value: value), directives: [])
+        self.init(name: FragmentName(value: value), directives: [])
     }
 }
 

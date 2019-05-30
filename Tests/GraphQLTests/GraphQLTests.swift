@@ -12,37 +12,37 @@ private extension GraphQL.Selection {
 
 class NameTests: XCTestCase {
     func testNameEmpty() throws {
-        XCTAssertNil(GraphQL.Name(check: ""))
+        XCTAssertNil(Name(check: ""))
     }
 
     func testNameOneValid() throws {
-        XCTAssertEqual(GraphQL.Name(check: "a")?.value, "a")
+        XCTAssertEqual(Name(check: "a")?.value, "a")
     }
 
     func testNameOneInvalid() throws {
-        XCTAssertNil(GraphQL.Name(check: "!"))
+        XCTAssertNil(Name(check: "!"))
     }
 
     func testNameNextValid() throws {
-        XCTAssertEqual(GraphQL.Name(check: "a1")?.value, "a1")
+        XCTAssertEqual(Name(check: "a1")?.value, "a1")
     }
 
     func testNameNextInvalid() throws {
-        XCTAssertNil(GraphQL.Name(check: "a!"))
+        XCTAssertNil(Name(check: "a!"))
     }
 }
 
 class FragmentNameTests: XCTestCase {
     func testNameValid() throws {
-        XCTAssertEqual(GraphQL.FragmentName(check: "valid")?.value, "valid")
+        XCTAssertEqual(FragmentName(check: "valid")?.value, "valid")
     }
 
     func testNameInvalidChars() throws {
-        XCTAssertNil(GraphQL.FragmentName(check: "🐶"))
+        XCTAssertNil(FragmentName(check: "🐶"))
     }
 
     func testNameOn() throws {
-        XCTAssertNil(GraphQL.FragmentName(check: "on"))
+        XCTAssertNil(FragmentName(check: "on"))
     }
 }
 

@@ -13,7 +13,7 @@ public extension Stringifier where A == ExecutableDefinition {
     static let compact = Stringifier(stringify: compactExecutableDefinitionStringify)
 }
 
-public extension Stringifier where A == GraphQL.Name {
+public extension Stringifier where A == Name {
     static let normal = Stringifier(stringify: normalNameStringify)
 }
 
@@ -25,7 +25,7 @@ public extension Stringifier where A == GraphQL.Field {
     static let compact = Stringifier(stringify: compactFieldStringify)
 }
 
-public extension Stringifier where A == GraphQL.FragmentName {
+public extension Stringifier where A == FragmentName {
     static let normal = Stringifier(stringify: normalFragmentNameStringify)
 }
 
@@ -114,8 +114,8 @@ func compactExecutableDefinitionStringify(gql: ExecutableDefinition) throws -> S
     }
 }
 
-func normalNameStringify(_ n: GraphQL.Name) throws -> String {
-    guard validateName(n.value) else { throw GraphQL.Name.BadValue(value: n.value) }
+func normalNameStringify(_ n: Name) throws -> String {
+    guard validateName(n.value) else { throw Name.BadValue(value: n.value) }
     return n.value
 }
 
@@ -138,8 +138,8 @@ func compactFieldStringify(field: GraphQL.Field) throws -> String {
     return #"\#(aliasPrefix)\#(name)\#(args)\#(directives)\#(selections)"#
 }
 
-func normalFragmentNameStringify(_ n: GraphQL.FragmentName) throws -> String {
-    guard validateFragmentName(n.value) else { throw GraphQL.FragmentName.BadValue(value: n.value) }
+func normalFragmentNameStringify(_ n: FragmentName) throws -> String {
+    guard validateFragmentName(n.value) else { throw FragmentName.BadValue(value: n.value) }
     return n.value
 }
 
@@ -211,7 +211,7 @@ func normalVariableStringify(variable: GraphQL.Variable) throws -> String {
 }
 
 func compactTypeReferenceStringify(typeRef: GraphQL.TypeReference) throws -> String {
-    let strn = { (n: GraphQL.Name) in try Stringifier.normal.stringify(n) }
+    let strn = { (n: Name) in try Stringifier.normal.stringify(n) }
     let strl = { (l: [GraphQL.TypeReference]) in
         "[" + (try l.map(compactTypeReferenceStringify(typeRef:)).joined(separator: " ")) + "]"
     }
