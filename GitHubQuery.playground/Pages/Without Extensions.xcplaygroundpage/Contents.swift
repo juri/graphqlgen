@@ -1,12 +1,12 @@
 import Foundation
-import GraphQLGen
+import GraphQLer
 import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
 let gql = Document(definitions: [
     .query([
-        .field(named: "repository", arguments: ["owner": "juri", "name": "graphqlgen"], selections: [
+        .field(named: "repository", arguments: ["owner": "juri", "name": "graphqler"], selections: [
             .inlineFragment(on: "Repository", selections: [
                 .field(named: "defaultBranchRef", selections: [
                     .field(named: "target", selections: [

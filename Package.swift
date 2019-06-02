@@ -3,17 +3,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "GraphQLGen",
+    name: "GraphQLer",
     products: [
-        .library(name: "GraphQLGen", targets: ["GraphQLGen"]),
+        .library(name: "GraphQLer", targets: ["GraphQLer"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "GraphQLGen",
+            name: "GraphQLer",
             dependencies: []),
         .testTarget(
             name: "GraphQLTests",
-            dependencies: ["GraphQLGen"]),
+            dependencies: ["GraphQLer"]),
     ]
 )

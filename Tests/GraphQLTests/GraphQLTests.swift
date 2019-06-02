@@ -1,5 +1,5 @@
 import XCTest
-@testable import GraphQLGen
+@testable import GraphQLer
 
 private extension Selection {
     static var f1: Selection { return .field(.init(name: "f1")) }

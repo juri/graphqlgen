@@ -1,5 +1,5 @@
 import Foundation
-import GraphQLGen
+import GraphQLer
 import PlaygroundSupport
 
 PlaygroundPage.current.needsIndefiniteExecution = true
@@ -51,7 +51,7 @@ extension InlineFragment {
 
 let gql = Document(definitions: [
     .query([
-        .repository(owner: "juri", name: "graphqlgen", selections: [
+        .repository(owner: "juri", name: "graphqler", selections: [
             .inlineFragment(.onRepository([
                 .defaultBranchRef([
                     .target([
