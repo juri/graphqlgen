@@ -1,6 +1,6 @@
 # GraphQLer
 
-[![Swift 5.0](https://img.shields.io/badge/swift-5.0-red.svg?style=flat)](https://developer.apple.com/swift)
+[![Swift 5.3](https://img.shields.io/badge/swift-5.3-red.svg?style=flat)](https://developer.apple.com/swift)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Twitter](https://img.shields.io/badge/twitter-@juripakaste-brightgreen.svg)](http://twitter.com/juripakaste)
 
