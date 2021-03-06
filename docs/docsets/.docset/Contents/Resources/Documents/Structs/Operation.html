@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Operation Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/Operation" class="dashAnchor"></a>
+    <a title="Operation Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">GraphQLer Docs</a> (65% documented)</p>
+        <p class="header-right"><a href="https://github.com/juri/graphqler"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">GraphQLer Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Operation Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ExecutableDefinition.html">ExecutableDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InputValueFormat.html">InputValueFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/NonNullTypeReference.html">NonNullTypeReference</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OperationType.html">OperationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Selection.html">Selection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TypeReference.html">TypeReference</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Validator.html">Validator</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Arguments.html">Arguments</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Directive.html">Directive</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Document.html">Document</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Field.html">Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FragmentDefinition.html">FragmentDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FragmentNameValidator.html">FragmentNameValidator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FragmentSpread.html">FragmentSpread</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GraphQLTypeError.html">GraphQLTypeError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/InlineFragment.html">InlineFragment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/NameValidator.html">NameValidator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ObjectValue.html">ObjectValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Operation.html">Operation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SelectionSet.html">SelectionSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Stringifier.html">Stringifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ValidatedName.html">ValidatedName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ValidatedName/BadValue.html">– BadValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Variable.html">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariableDefinition.html">VariableDefinition</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9GraphQLer12FragmentNamea">FragmentName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:9GraphQLer4Namea">Name</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Operation</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Operation</span></code></pre>
+
+                </div>
+              </div>
+            <p>An operation.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations">2.3 Operations</a>
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV4typeAA0C4TypeOvp"></a>
+                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV4typeAA0C4TypeOvp">type</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/OperationType.html">OperationType</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV4nameAA13ValidatedNameVyAA0F9ValidatorVGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV4nameAA13ValidatedNameVyAA0F9ValidatorVGSgvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9GraphQLer4Namea">Name</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV19variableDefinitionsSayAA18VariableDefinitionVGvp"></a>
+                    <a name="//apple_ref/swift/Property/variableDefinitions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV19variableDefinitionsSayAA18VariableDefinitionVGvp">variableDefinitions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">variableDefinitions</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/VariableDefinition.html">VariableDefinition</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV10directivesSayAA9DirectiveVGvp"></a>
+                    <a name="//apple_ref/swift/Property/directives" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV10directivesSayAA9DirectiveVGvp">directives</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">directives</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Directive.html">Directive</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV12selectionSetAA09SelectionE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/selectionSet" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV12selectionSetAA09SelectionE0Vvp">selectionSet</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">selectionSet</span><span class="p">:</span> <span class="kt"><a href="../Structs/SelectionSet.html">SelectionSet</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV4type4name19variableDefinitions10directives12selectionSetAcA0C4TypeO_AA13ValidatedNameVyAA0M9ValidatorVGSgSayAA18VariableDefinitionVGSayAA9DirectiveVGAA09SelectionJ0Vtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(type:name:variableDefinitions:directives:selectionSet:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV4type4name19variableDefinitions10directives12selectionSetAcA0C4TypeO_AA13ValidatedNameVyAA0M9ValidatorVGSgSayAA18VariableDefinitionVGSayAA9DirectiveVGAA09SelectionJ0Vtcfc">init(type:name:variableDefinitions:directives:selectionSet:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a new <code>Operation</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/OperationType.html">OperationType</a></span><span class="p">,</span>
+    <span class="nv">name</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9GraphQLer4Namea">Name</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">variableDefinitions</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/VariableDefinition.html">VariableDefinition</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">directives</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Directive.html">Directive</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">selectionSet</span><span class="p">:</span> <span class="kt"><a href="../Structs/SelectionSet.html">SelectionSet</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:9GraphQLer9OperationV4type4name19variableDefinitions10directives10selectionsAcA0C4TypeO_AA13ValidatedNameVyAA0L9ValidatorVGSgSayAA18VariableDefinitionVGSayAA9DirectiveVGSayAA9SelectionOGtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(type:name:variableDefinitions:directives:selections:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:9GraphQLer9OperationV4type4name19variableDefinitions10directives10selectionsAcA0C4TypeO_AA13ValidatedNameVyAA0L9ValidatorVGSgSayAA18VariableDefinitionVGSayAA9DirectiveVGSayAA9SelectionOGtcfc">init(type:name:variableDefinitions:directives:selections:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/OperationType.html">OperationType</a></span><span class="p">,</span>
+    <span class="nv">name</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:9GraphQLer4Namea">Name</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">variableDefinitions</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/VariableDefinition.html">VariableDefinition</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">directives</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Directive.html">Directive</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">selections</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/Selection.html">Selection</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://juripakaste.fi" target="_blank" rel="external">Juri Pakaste</a>. All rights reserved. (Last updated: 2019-06-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
