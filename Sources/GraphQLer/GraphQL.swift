@@ -13,7 +13,7 @@
 /// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
 public struct Document {
     /// The executable definitions contained by this document.
-    public let definitions: [ExecutableDefinition]
+    public var definitions: [ExecutableDefinition]
 
     /// Initialize a new `Document`.
     public init(definitions: [ExecutableDefinition]) {
@@ -72,11 +72,11 @@ public struct ValidatedName<V: Validator> where V.Value == String {
 ///
 /// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
 public struct Operation {
-    public let type: OperationType
-    public let name: Name?
-    public let variableDefinitions: [VariableDefinition]
-    public let directives: [Directive]
-    public let selectionSet: SelectionSet
+    public var type: OperationType
+    public var name: Name?
+    public var variableDefinitions: [VariableDefinition]
+    public var directives: [Directive]
+    public var selectionSet: SelectionSet
 
     /// Initialize a new `Operation`.
     public init(
@@ -116,7 +116,7 @@ public enum Selection {
 ///
 /// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
 public struct SelectionSet {
-    public let selections: [Selection]
+    public var selections: [Selection]
 
     public init(selections: [Selection]) {
         self.selections = selections
@@ -130,11 +130,11 @@ public struct SelectionSet {
 /// - SeeAlso: [2.5 Fields](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fields)
 /// - SeeAlso: [2.7 Field Alias](https://graphql.github.io/graphql-spec/June2018/#sec-Field-Alias)
 public struct Field {
-    public let alias: Name?
-    public let name: Name
-    public let arguments: Arguments
-    public let directives: [Directive]
-    public let selectionSet: SelectionSet
+    public var alias: Name?
+    public var name: Name
+    public var arguments: Arguments
+    public var directives: [Directive]
+    public var selectionSet: SelectionSet
 
     /// Initialize a new `Field`.
     public init(
@@ -157,7 +157,7 @@ public struct Field {
 /// - SeeAlso: [2.6 Arguments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Arguments)
 public struct Arguments {
     /// The name-value pairs in this argument list.
-    public let args: [(Name, Any)]
+    public var args: [(Name, Any)]
 
     /// Initialize a new `Arguments`.
     public init(args: [(Name, Any)]) {
@@ -179,8 +179,8 @@ public typealias FragmentName = ValidatedName<FragmentNameValidator>
 ///
 /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
 public struct FragmentSpread {
-    public let name: FragmentName
-    public let directives: [Directive]
+    public var name: FragmentName
+    public var directives: [Directive]
 
     /// Initialize a new `FragmentSpread`.
     public init(
@@ -196,10 +196,10 @@ public struct FragmentSpread {
 ///
 /// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
 public struct FragmentDefinition {
-    public let name: FragmentName
-    public let typeCondition: Name
-    public let directives: [Directive]
-    public let selectionSet: SelectionSet
+    public var name: FragmentName
+    public var typeCondition: Name
+    public var directives: [Directive]
+    public var selectionSet: SelectionSet
 
     /// Initialize a new `FragmentDefinition`.
     public init(
@@ -219,9 +219,9 @@ public struct FragmentDefinition {
 ///
 /// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
 public struct InlineFragment {
-    public let namedType: Name?
-    public let directives: [Directive]
-    public let selectionSet: SelectionSet
+    public var namedType: Name?
+    public var directives: [Directive]
+    public var selectionSet: SelectionSet
 
     /// Initialize a new `InlineFragment`.
     public init(
@@ -242,7 +242,7 @@ public struct InlineFragment {
 ///
 /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
 public struct ObjectValue {
-    public let fields: [(Name, Any)]
+    public var fields: [(Name, Any)]
 
     /// Initialize a new `ObjectValue`.
     public init(fields: [(Name, Any)]) {
@@ -268,7 +268,7 @@ public struct EnumValue {
 ///
 /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
 public struct Variable {
-    public let name: Name
+    public var name: Name
 
     /// Initialize a new `Variable`.
     public init(name: Name) {
@@ -280,8 +280,8 @@ public struct Variable {
 ///
 /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
 public struct VariableDefinition {
-    public let variable: Variable
-    public let type: TypeReference
+    public var variable: Variable
+    public var type: TypeReference
 
     /// Initialize a new `VariableDefinition`.
     public init(
@@ -321,8 +321,8 @@ public enum NonNullTypeReference {
 ///
 /// - SeeAlso: [2.12 Directives](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Directives)
 public struct Directive {
-    public let name: Name
-    public let arguments: Arguments
+    public var name: Name
+    public var arguments: Arguments
 
     /// Initialize a new `Directive`.
     public init(
