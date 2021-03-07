@@ -164,6 +164,16 @@ public struct Arguments {
         self.args = args
     }
 
+    /// Append an argument to the argument list.
+    mutating func append(name: Name, value: Any) {
+        self.append(pair: (name, value))
+    }
+
+    /// Append an argument to the argument list.
+    mutating func append(pair: (Name, Value)) {
+        self.args.append(pair)
+    }
+
     /// An empty `Arguments` instance.
     public static let empty = Arguments([])
 }
