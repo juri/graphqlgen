@@ -238,7 +238,7 @@ public struct InlineFragment {
 /// An input object value to embed in Arguments.
 ///
 /// You'll want to use this if you care about the ordering of the fields, but otherwise a
-/// `Dictionary< Any>` is probably easier.
+/// `Dictionary<Name, Any>` is probably easier.
 ///
 /// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
 public struct ObjectValue {
