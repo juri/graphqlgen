@@ -250,6 +250,20 @@ public struct ObjectValue {
     }
 }
 
+/// A value of an Enum type.
+///
+/// Enum values are Names that are included in the document as-is without quotation.
+///
+/// - SeeAlso: [3.9 Enums](http://spec.graphql.org/June2018/#sec-Enums)
+public struct EnumValue {
+    public var name: Name
+
+    /// Initialize a new `EnumValue`.
+    public init(_ name: Name) {
+        self.name = name
+    }
+}
+
 /// A variable.
 ///
 /// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)

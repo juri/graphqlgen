@@ -165,6 +165,8 @@ func compactFormat(value: Any) throws -> String {
         return try normalVariableStringify(variable: v)
     case let o as ObjectValue:
         return try compactObjectValueStringify(objectValue: o)
+    case let e as EnumValue:
+        return try normalNameStringify(e.name)
     default:
         throw GraphQLTypeError(message: "Unsupported type of \(value): \(type(of: value))")
     }

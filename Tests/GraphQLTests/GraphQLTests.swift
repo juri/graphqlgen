@@ -376,4 +376,12 @@ class GraphQLTests: XCTestCase {
         let gql = Field(name: "valid", arguments: ["?": "invalid"], selectionSet: [])
         XCTAssertThrowsError(try gql.compactString())
     }
+
+    func testEnumValue() throws {
+        let gql = Field(name: "pullRequests", arguments: ["states": [EnumValue("OPEN")]])
+        XCTAssertEqual(
+            try Stringifier.compact.stringify(gql),
+            "pullRequests(states: [OPEN])"
+        )
+    }
 }
