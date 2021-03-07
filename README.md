@@ -9,7 +9,7 @@ GraphQLer is a Swift library for generating [GraphQL] documents (i.e. things you
 It's a pure Swift library with no dependencies beyond the standard library, so it should be usable in any environment where you can use Swift.
 
 [GraphQL]: https://graphql.org
-[June 2018 spec]: https://graphql.github.io/graphql-spec/June2018/
+[June 2018 spec]: https://spec.graphql.org/June2018/
 
 ## Usage
 

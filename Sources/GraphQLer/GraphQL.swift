@@ -10,7 +10,7 @@
 /// GraphQLer does not support type system definitions or extensions, so the only things
 /// a `Document` may contain are `ExecutableDefinition`s.
 ///
-/// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
+/// - SeeAlso: [2.2 Document](https://spec.graphql.org/June2018/#sec-Language.Document)
 public struct Document {
     /// The executable definitions contained by this document.
     public var definitions: [ExecutableDefinition]
@@ -23,7 +23,7 @@ public struct Document {
 
 /// `ExecutableDefinition` represents an executable definition element in a GraphQL document.
 ///
-/// - SeeAlso: [2.2 Document](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Document)
+/// - SeeAlso: [2.2 Document](https://spec.graphql.org/June2018/#sec-Language.Document)
 public enum ExecutableDefinition {
     /// A GraphQL operation.
     case operation(Operation)
@@ -34,7 +34,7 @@ public enum ExecutableDefinition {
 
 /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`.
 ///
-/// - SeeAlso: [2.1.9 Names](https://graphql.github.io/graphql-spec/June2018/#sec-Names)
+/// - SeeAlso: [2.1.9 Names](https://spec.graphql.org/June2018/#sec-Names)
 public typealias Name = ValidatedName<NameValidator>
 
 /// `ValidatedName` is a name with pluggable validation logic.
@@ -70,7 +70,7 @@ public struct ValidatedName<V: Validator> where V.Value == String {
 
 /// An operation.
 ///
-/// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
+/// - SeeAlso: [2.3 Operations](https://spec.graphql.org/June2018/#sec-Language.Operations)
 public struct Operation {
     public var type: OperationType
     public var name: Name?
@@ -96,7 +96,7 @@ public struct Operation {
 
 /// The type of an `Operation`.
 ///
-/// - SeeAlso: [2.3 Operations](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Operations)
+/// - SeeAlso: [2.3 Operations](https://spec.graphql.org/June2018/#sec-Language.Operations)
 public enum OperationType: String {
     case query
     case mutation
@@ -105,7 +105,7 @@ public enum OperationType: String {
 
 /// One selection in a `SelectionSet`.
 ///
-/// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
+/// - SeeAlso: [2.4 Selection Sets](https://spec.graphql.org/June2018/#sec-Selection-Sets)
 public enum Selection {
     case field(Field)
     case inlineFragment(InlineFragment)
@@ -114,7 +114,7 @@ public enum Selection {
 
 /// A list of selections.
 ///
-/// - SeeAlso: [2.4 Selection Sets](https://graphql.github.io/graphql-spec/June2018/#sec-Selection-Sets)
+/// - SeeAlso: [2.4 Selection Sets](https://spec.graphql.org/June2018/#sec-Selection-Sets)
 public struct SelectionSet {
     public var selections: [Selection]
 
@@ -127,8 +127,8 @@ public struct SelectionSet {
 
 /// A field.
 ///
-/// - SeeAlso: [2.5 Fields](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fields)
-/// - SeeAlso: [2.7 Field Alias](https://graphql.github.io/graphql-spec/June2018/#sec-Field-Alias)
+/// - SeeAlso: [2.5 Fields](https://spec.graphql.org/June2018/#sec-Language.Fields)
+/// - SeeAlso: [2.7 Field Alias](https://spec.graphql.org/June2018/#sec-Field-Alias)
 public struct Field {
     public var alias: Name?
     public var name: Name
@@ -154,7 +154,7 @@ public struct Field {
 
 /// Arguments.
 ///
-/// - SeeAlso: [2.6 Arguments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Arguments)
+/// - SeeAlso: [2.6 Arguments](https://spec.graphql.org/June2018/#sec-Language.Arguments)
 public struct Arguments {
     /// The name-value pairs in this argument list.
     public var args: [(Name, Any)]
@@ -182,12 +182,12 @@ public struct Arguments {
 ///
 /// A name matching `/[_A-Za-z][_0-9A-Za-z]*/`, but not `on`.
 ///
-/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+/// - SeeAlso: [2.8 Fragments](https://spec.graphql.org/June2018/#sec-Language.Fragments)
 public typealias FragmentName = ValidatedName<FragmentNameValidator>
 
 /// A fragment spread.
 ///
-/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+/// - SeeAlso: [2.8 Fragments](https://spec.graphql.org/June2018/#sec-Language.Fragments)
 public struct FragmentSpread {
     public var name: FragmentName
     public var directives: [Directive]
@@ -204,7 +204,7 @@ public struct FragmentSpread {
 
 /// A fragment definition.
 ///
-/// - SeeAlso: [2.8 Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Fragments)
+/// - SeeAlso: [2.8 Fragments](https://spec.graphql.org/June2018/#sec-Language.Fragments)
 public struct FragmentDefinition {
     public var name: FragmentName
     public var typeCondition: Name
@@ -227,7 +227,7 @@ public struct FragmentDefinition {
 
 /// An inline fragment.
 ///
-/// - SeeAlso: [2.8.2 Inline Fragments](https://graphql.github.io/graphql-spec/June2018/#sec-Inline-Fragments)
+/// - SeeAlso: [2.8.2 Inline Fragments](https://spec.graphql.org/June2018/#sec-Inline-Fragments)
 public struct InlineFragment {
     public var namedType: Name?
     public var directives: [Directive]
@@ -250,7 +250,7 @@ public struct InlineFragment {
 /// You'll want to use this if you care about the ordering of the fields, but otherwise a
 /// `Dictionary<Name, Any>` is probably easier.
 ///
-/// - SeeAlso: [2.9.8 Input Object Values](https://graphql.github.io/graphql-spec/June2018/#sec-Input-Object-Values)
+/// - SeeAlso: [2.9.8 Input Object Values](https://spec.graphql.org/June2018/#sec-Input-Object-Values)
 public struct ObjectValue {
     public var fields: [(Name, Any)]
 
@@ -276,7 +276,7 @@ public struct EnumValue {
 
 /// A variable.
 ///
-/// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
+/// - SeeAlso: [2.10 Variables](https://spec.graphql.org/June2018/#sec-Language.Variables)
 public struct Variable {
     public var name: Name
 
@@ -288,7 +288,7 @@ public struct Variable {
 
 /// A variable definition.
 ///
-/// - SeeAlso: [2.10 Variables](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Variables)
+/// - SeeAlso: [2.10 Variables](https://spec.graphql.org/June2018/#sec-Language.Variables)
 public struct VariableDefinition {
     public var variable: Variable
     public var type: TypeReference
@@ -308,7 +308,7 @@ public struct VariableDefinition {
 /// The type reference can be a single `Name`, a list of `TypeReference`s,
 /// or a non-null version of those options, wrapped in a `NonNullTypeReference`.
 ///
-/// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
+/// - SeeAlso: [2.11 Type References](https://spec.graphql.org/June2018/#sec-Type-References)
 public indirect enum TypeReference {
     case named(Name)
     case list([TypeReference])
@@ -319,7 +319,7 @@ public indirect enum TypeReference {
 ///
 /// A non-null type reference can be either a single `Name` or a list of `TypeReference`s.
 ///
-/// - SeeAlso: [2.11 Type References](https://graphql.github.io/graphql-spec/June2018/#sec-Type-References)
+/// - SeeAlso: [2.11 Type References](https://spec.graphql.org/June2018/#sec-Type-References)
 public enum NonNullTypeReference {
     case named(Name)
     case list([TypeReference])
@@ -329,7 +329,7 @@ public enum NonNullTypeReference {
 ///
 /// A directive has a name and arguments.
 ///
-/// - SeeAlso: [2.12 Directives](https://graphql.github.io/graphql-spec/June2018/#sec-Language.Directives)
+/// - SeeAlso: [2.12 Directives](https://spec.graphql.org/June2018/#sec-Language.Directives)
 public struct Directive {
     public var name: Name
     public var arguments: Arguments
