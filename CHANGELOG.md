@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1](https://www.github.com/juri/graphqler/compare/0.3.0...0.3.1) (2021-03-07)
+
+### Bug Fixes
+
+- Make the `append` methods on `Arguments` public 🤦‍♂️
+
+
 ## [0.3.0](https://www.github.com/juri/graphqler/compare/0.2...0.3.0) (2021-03-07)
 
 ### Bug Fixes
