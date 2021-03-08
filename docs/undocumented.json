@@ -2,441 +2,238 @@
   "warnings": [
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 75,
-      "symbol": "Operation.type",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 76,
-      "symbol": "Operation.name",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 77,
-      "symbol": "Operation.variableDefinitions",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 78,
-      "symbol": "Operation.directives",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 79,
-      "symbol": "Operation.selectionSet",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 101,
-      "symbol": "OperationType.query",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 102,
-      "symbol": "OperationType.mutation",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 103,
-      "symbol": "OperationType.subscription",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 110,
-      "symbol": "Selection.field(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 111,
-      "symbol": "Selection.inlineFragment(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 112,
-      "symbol": "Selection.fragmentSpread(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 119,
-      "symbol": "SelectionSet.selections",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 121,
-      "symbol": "SelectionSet.init(selections:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 125,
-      "symbol": "SelectionSet.empty",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 133,
-      "symbol": "Field.alias",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 134,
-      "symbol": "Field.name",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 135,
-      "symbol": "Field.arguments",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 136,
-      "symbol": "Field.directives",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 137,
-      "symbol": "Field.selectionSet",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 192,
+      "line": 211,
       "symbol": "FragmentSpread.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 193,
+      "line": 212,
       "symbol": "FragmentSpread.directives",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 209,
+      "line": 228,
       "symbol": "FragmentDefinition.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 210,
+      "line": 229,
       "symbol": "FragmentDefinition.typeCondition",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 211,
+      "line": 230,
       "symbol": "FragmentDefinition.directives",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 212,
+      "line": 231,
       "symbol": "FragmentDefinition.selectionSet",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 232,
+      "line": 251,
       "symbol": "InlineFragment.namedType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 233,
+      "line": 252,
       "symbol": "InlineFragment.directives",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 234,
+      "line": 253,
       "symbol": "InlineFragment.selectionSet",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 255,
+      "line": 274,
       "symbol": "ObjectValue.fields",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 269,
-      "symbol": "EnumValue.name",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 281,
-      "symbol": "Variable.name",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 293,
-      "symbol": "VariableDefinition.variable",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 294,
-      "symbol": "VariableDefinition.type",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 313,
-      "symbol": "TypeReference.named(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 314,
-      "symbol": "TypeReference.list(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 315,
-      "symbol": "TypeReference.nonNull(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 324,
-      "symbol": "NonNullTypeReference.named(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 325,
-      "symbol": "NonNullTypeReference.list(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 334,
+      "line": 362,
       "symbol": "Directive.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 335,
+      "line": 363,
       "symbol": "Directive.arguments",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 377,
-      "symbol": "Operation.init(type:name:variableDefinitions:directives:selections:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 400,
+      "line": 430,
       "symbol": "Selection.inlineFragment(on:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 408,
+      "line": 438,
       "symbol": "Selection.field(named:arguments:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 425,
+      "line": 455,
       "symbol": "SelectionSet.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 429,
+      "line": 459,
       "symbol": "SelectionSet.init(selectionNames:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 435,
+      "line": 465,
       "symbol": "InlineFragment.init(namedType:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 447,
+      "line": 477,
       "symbol": "ObjectValue.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 453,
+      "line": 483,
       "symbol": "Variable.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 459,
+      "line": 489,
       "symbol": "Field.init(name:arguments:directives:selectionSet:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 473,
+      "line": 503,
       "symbol": "Field.init(alias:name:arguments:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 488,
+      "line": 518,
       "symbol": "Field.init(alias:name:arguments:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 505,
+      "line": 535,
       "symbol": "Arguments.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 521,
+      "line": 551,
       "symbol": "FragmentDefinition.init(name:typeCondition:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 534,
+      "line": 564,
       "symbol": "FragmentDefinition.init(name:typeCondition:directives:selections:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 548,
+      "line": 578,
       "symbol": "Validator",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 549,
+      "line": 579,
       "symbol": "Validator.Value",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 550,
+      "line": 580,
       "symbol": "Validator.validate(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 553,
+      "line": 583,
       "symbol": "NameValidator",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 554,
+      "line": 584,
       "symbol": "NameValidator.validate(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 559,
+      "line": 589,
       "symbol": "FragmentNameValidator",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 560,
+      "line": 590,
       "symbol": "FragmentNameValidator.validate(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 566,
+      "line": 596,
       "symbol": "GraphQLTypeError",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/juri/Projects/swift-graphql/Sources/GraphQLer/GraphQL.swift",
-      "line": 567,
+      "line": 597,
       "symbol": "GraphQLTypeError.message",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
