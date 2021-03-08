@@ -72,10 +72,15 @@ public struct ValidatedName<V: Validator> where V.Value == String {
 ///
 /// - SeeAlso: [2.3 Operations](https://spec.graphql.org/June2018/#sec-Language.Operations)
 public struct Operation {
+    /// Operation type.
     public var type: OperationType
+    /// Operation name.
     public var name: Name?
+    /// Variable definitions.
     public var variableDefinitions: [VariableDefinition]
+    /// Directives.
     public var directives: [Directive]
+    /// Selection set for this operation.
     public var selectionSet: SelectionSet
 
     /// Initialize a new `Operation`.
@@ -98,8 +103,11 @@ public struct Operation {
 ///
 /// - SeeAlso: [2.3 Operations](https://spec.graphql.org/June2018/#sec-Language.Operations)
 public enum OperationType: String {
+    /// A read-only fetch.
     case query
+    /// A write followed by a fetch.
     case mutation
+    /// A  long‐lived request that fetches data in response to source events.
     case subscription
 }
 
@@ -107,8 +115,11 @@ public enum OperationType: String {
 ///
 /// - SeeAlso: [2.4 Selection Sets](https://spec.graphql.org/June2018/#sec-Selection-Sets)
 public enum Selection {
+    /// A discrete piece of information to select.
     case field(Field)
+    /// A fragments defined inline within a selection set.
     case inlineFragment(InlineFragment)
+    /// A of common repeated selection of fields to reuse.
     case fragmentSpread(FragmentSpread)
 }
 
@@ -116,12 +127,15 @@ public enum Selection {
 ///
 /// - SeeAlso: [2.4 Selection Sets](https://spec.graphql.org/June2018/#sec-Selection-Sets)
 public struct SelectionSet {
+    /// The selections contained in this set. May be empty.
     public var selections: [Selection]
 
+    /// Initialize a new `SelectionSet` with this list of `Selection`s.
     public init(selections: [Selection]) {
         self.selections = selections
     }
 
+    /// An empty `SelectionSet`.
     public static let empty = SelectionSet(selections: [])
 }
 
@@ -130,10 +144,15 @@ public struct SelectionSet {
 /// - SeeAlso: [2.5 Fields](https://spec.graphql.org/June2018/#sec-Language.Fields)
 /// - SeeAlso: [2.7 Field Alias](https://spec.graphql.org/June2018/#sec-Field-Alias)
 public struct Field {
+    /// Define a different key to use in the response object for this field.
     public var alias: Name?
+    /// Name of this field.
     public var name: Name
+    /// Arguments to specify for this field.
     public var arguments: Arguments
+    /// Describe alternate runtime execution and type validation behavior for this field.
     public var directives: [Directive]
+    /// Select what information to include for this field.
     public var selectionSet: SelectionSet
 
     /// Initialize a new `Field`.
@@ -266,6 +285,7 @@ public struct ObjectValue {
 ///
 /// - SeeAlso: [3.9 Enums](http://spec.graphql.org/June2018/#sec-Enums)
 public struct EnumValue {
+    /// The name of this enumeration value.
     public var name: Name
 
     /// Initialize a new `EnumValue`.
@@ -274,10 +294,11 @@ public struct EnumValue {
     }
 }
 
-/// A variable.
+/// A variable. Represented as `$name` in the document.
 ///
 /// - SeeAlso: [2.10 Variables](https://spec.graphql.org/June2018/#sec-Language.Variables)
 public struct Variable {
+    /// The name of this variable.
     public var name: Name
 
     /// Initialize a new `Variable`.
@@ -286,11 +307,13 @@ public struct Variable {
     }
 }
 
-/// A variable definition.
+/// A variable definition. Represented as `$name: type` in the document.
 ///
 /// - SeeAlso: [2.10 Variables](https://spec.graphql.org/June2018/#sec-Language.Variables)
 public struct VariableDefinition {
+    /// The variable to define.
     public var variable: Variable
+    /// Type of the variable.
     public var type: TypeReference
 
     /// Initialize a new `VariableDefinition`.
@@ -310,8 +333,11 @@ public struct VariableDefinition {
 ///
 /// - SeeAlso: [2.11 Type References](https://spec.graphql.org/June2018/#sec-Type-References)
 public indirect enum TypeReference {
+    /// A named type.
     case named(Name)
+    /// A list of of type.
     case list([TypeReference])
+    /// A non-null type.
     case nonNull(NonNullTypeReference)
 }
 
@@ -321,7 +347,9 @@ public indirect enum TypeReference {
 ///
 /// - SeeAlso: [2.11 Type References](https://spec.graphql.org/June2018/#sec-Type-References)
 public enum NonNullTypeReference {
+    /// A named non-null type.
     case named(Name)
+    /// A list of non-null types.
     case list([TypeReference])
 }
 
@@ -374,6 +402,7 @@ extension ValidatedName: ExpressibleByStringLiteral {
 }
 
 extension Operation {
+    /// A convenience constructor with default values for all fields that can have them.
     public init(
         type: OperationType,
         name: Name? = nil,
@@ -391,6 +420,7 @@ extension Operation {
 }
 
 extension Selection: ExpressibleByStringLiteral {
+    /// A constructor that allows you to create a `Selection` with a string literal.
     public init(stringLiteral value: String) {
         self = .field(named: Name(value: value))
     }
