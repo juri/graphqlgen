@@ -165,12 +165,12 @@ public struct Arguments {
     }
 
     /// Append an argument to the argument list.
-    mutating func append(name: Name, value: Any) {
+    public mutating func append(name: Name, value: Any) {
         self.append(pair: (name, value))
     }
 
     /// Append an argument to the argument list.
-    mutating func append(pair: (Name, Value)) {
+    public mutating func append(pair: (Name, Value)) {
         self.args.append(pair)
     }
 
